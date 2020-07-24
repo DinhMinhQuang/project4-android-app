@@ -13,7 +13,7 @@ import retrofit2.http.POST;
 
 public interface UserClient {
 
-    @POST("authorization/login")
+    @POST("/authorization/login")
     Call<User> login(@Body HashMap<String, String> map);
 
     @GET("secretinfo")
