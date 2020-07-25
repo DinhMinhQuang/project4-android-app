@@ -1,4 +1,4 @@
-package fpt.aptech.project4_android_app;
+package fpt.aptech.project4_android_app.features.Map;
 
 import android.os.Bundle;
 
@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import fpt.aptech.project4_android_app.R;
 
 /**
  * A simple {@link Fragment} subclass.

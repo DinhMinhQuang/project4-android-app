@@ -10,6 +10,12 @@ import android.widget.FrameLayout;
 
 import com.google.android.material.tabs.TabLayout;
 
+import fpt.aptech.project4_android_app.features.Map.MapFragment;
+import fpt.aptech.project4_android_app.features.Order.DetailsOrderFragment;
+import fpt.aptech.project4_android_app.features.Order.ListOrderFragment;
+import fpt.aptech.project4_android_app.features.Profile.ShipperProfileFragment;
+import fpt.aptech.project4_android_app.features.Statustics.StatisticsFragment;
+
 public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private FrameLayout frameLayout;
@@ -51,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                         replaceFragment(new StatisticsFragment());
                         break;
                     case 4:
-                        replaceFragment(new UserProfileFragment());
+                        replaceFragment(new ShipperProfileFragment());
                         break;
                 }
             }

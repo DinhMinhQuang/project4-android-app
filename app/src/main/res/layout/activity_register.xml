@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentTop="true"
+    tools:context=".features.Logon.RegisterActivity">
+
+    <EditText
+        android:id="@+id/idCard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="91dp"
+        android:layout_marginTop="375dp"
+        android:layout_marginRight="91dp"
+        android:ems="10"
+        android:hint="Enter Your Card Number"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/fullName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="91dp"
+        android:layout_marginTop="97dp"
+        android:layout_marginRight="91dp"
+        android:ems="10"
+        android:hint="Enter Full Name"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="91dp"
+        android:layout_marginTop="167dp"
+        android:layout_marginRight="91dp"
+        android:ems="10"
+        android:hint="Enter Phone Number"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="91dp"
+        android:layout_marginTop="236dp"
+        android:layout_marginRight="91dp"
+        android:ems="10"
+        android:hint="Enter Password"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/dob"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="91dp"
+        android:layout_marginTop="302dp"
+        android:layout_marginRight="91dp"
+        android:ems="10"
+        android:inputType="date" />
+
+    <CheckBox
+        android:id="@+id/male"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="92dp"
+        android:layout_marginTop="441dp"
+        android:layout_marginRight="238dp"
+        android:text="Male" />
+
+    <CheckBox
+        android:id="@+id/female"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="174dp"
+        android:layout_marginTop="441dp"
+        android:layout_marginRight="140dp"
+        android:text="Female" />
+
+    <Button
+        android:id="@+id/register"
+        android:layout_width="208dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="486dp"
+        android:layout_marginRight="93dp"
+        android:text="Register" />
+
+</RelativeLayout>
