@@ -14,7 +14,7 @@ import fpt.aptech.project4_android_app.features.Map.MapFragment;
 import fpt.aptech.project4_android_app.features.Order.DetailsOrderFragment;
 import fpt.aptech.project4_android_app.features.Order.ListOrderFragment;
 import fpt.aptech.project4_android_app.features.Profile.ShipperProfileFragment;
-import fpt.aptech.project4_android_app.features.Statustics.StatisticsFragment;
+import fpt.aptech.project4_android_app.features.Statistics.StatisticsFragment;
 
 public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;

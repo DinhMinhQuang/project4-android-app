@@ -1,4 +1,4 @@
-package fpt.aptech.project4_android_app.features.Statustics;
+package fpt.aptech.project4_android_app.features.Statistics;
 
 import android.os.Bundle;
 
