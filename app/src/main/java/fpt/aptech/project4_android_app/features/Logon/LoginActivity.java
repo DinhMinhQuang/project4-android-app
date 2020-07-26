@@ -71,6 +71,8 @@ public class LoginActivity extends AppCompatActivity {
                         else {
                             Log.d("Tag", response.code()+ "");
                             JWT jwt = new JWT(response.body().getAccessToken());
+                            edit.putString("jwt", String.valueOf(jwt));
+                            edit.apply();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             intent.putExtra("jwt", jwt);
                             startActivity(intent);

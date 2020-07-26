@@ -18,7 +18,7 @@ public class Order {
     private List<String> products;
     @SerializedName("address")
     @Expose
-    private Map<String, String> address;
+    private String address;
     @SerializedName("amount")
     @Expose
     private Double amount;
@@ -53,11 +53,11 @@ public class Order {
         this.products = products;
     }
 
-    public Map<String, String> getAddress() {
+    public String getAddress() {
         return address;
     }
 
-    public void setAddress(Map<String, String> address) {
+    public void setAddress(String address) {
         this.address = address;
     }
 

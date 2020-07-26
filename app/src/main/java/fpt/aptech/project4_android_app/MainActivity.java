@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
 import android.widget.FrameLayout;
 
+import com.auth0.android.jwt.JWT;
 import com.google.android.material.tabs.TabLayout;
 
 import fpt.aptech.project4_android_app.features.Map.MapFragment;
@@ -36,6 +37,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ListOrderFragment listOrderFragment = new ListOrderFragment();
+        JWT jwt = (JWT) getIntent().getParcelableExtra("jwt");
+        Bundle bundle = new Bundle();
+        bundle.putString("access_token", String.valueOf(jwt));
+        listOrderFragment.setArguments(bundle);
         instance = this;
         tabLayout = findViewById(R.id.tabLayout);
         frameLayout = findViewById(R.id.frameLayout);

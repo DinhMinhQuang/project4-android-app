@@ -76,7 +76,7 @@
         android:layout_width="393dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="170dp"
+        android:layout_marginTop="260dp"
         android:backgroundTint="#939292"
         android:text="Đăng Kí"
         android:textColor="#FFFFFF"
