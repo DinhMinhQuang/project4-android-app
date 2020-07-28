@@ -43,6 +43,7 @@ public class ListOrderFragment extends Fragment {
     public static final String PREFS = "PREFS";
     OrderClient orderClient = RetroClass.getRetrofitInstance().create(OrderClient.class);
     SharedPreferences sp;
+    SharedPreferences.Editor edit;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -79,6 +80,7 @@ public class ListOrderFragment extends Fragment {
     }
     private void getOrder(){
         sp = this.getActivity().getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        edit = sp.edit();
         String jwt = sp.getString("jwt", null);
         String access_token = "JWT "+jwt;
         Call<List<Order>> call = orderClient.getOrders(access_token);
@@ -104,15 +106,16 @@ public class ListOrderFragment extends Fragment {
                         list.add(map);
                     }
 
-                    SimpleAdapter simpleAdapter = new SimpleAdapter(getActivity(), list, R.layout.order_details, fromArray, to);
-                    listView.setAdapter(simpleAdapter);
-                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            Intent intent = new Intent(getActivity(), DetailsOrderActivity.class);
-                            intent.putExtra("orderId", String.valueOf(list.get(i).get("_id")));
-                            startActivity(intent);
-                        }
+                    SimpleAdapter simpleAdapter;
+                    if (getActivity() != null) {
+                        simpleAdapter = new SimpleAdapter(getActivity(), list, R.layout.order_details, fromArray, to);
+                        listView.setAdapter(simpleAdapter);
+                    }
+                    listView.setOnItemClickListener((adapterView, view, i, l) -> {
+                        Intent intent = new Intent(getActivity(), DetailsOrderActivity.class);
+                        edit.putString("orderId", String.valueOf(list.get(i).get("_id")));
+                        edit.apply();
+                        startActivity(intent);
                     });
                 }
             }

@@ -14,5 +14,5 @@ public interface OrderClient {
     Call<List<Order>> getOrders(@Header("Authorization") String access_token);
 
     @GET("/order/{id}")
-    Call<Order> getOrder(@Header("Authorization") String access_token, @Path("_id") String id);
+    Call<Order> getOrder(@Header("Authorization") String access_token, @Path("id") String id);
 }

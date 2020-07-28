@@ -14,28 +14,28 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_gravity="center_vertical"
+        android:orientation="horizontal"
         android:weightSum="3">
 
         <TextView
+            android:id="@+id/tvStore"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:layout_weight="2"
-            android:text="Order Details"
             android:textColor="#444"
             android:textSize="18dp"
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/tvAmount"
             android:layout_width="0dp"
-            android:gravity="right"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textStyle="bold"
+            android:gravity="right"
             android:textSize="15dp"
-            android:text="₹435.00"></TextView>
+            android:textStyle="bold"></TextView>
     </LinearLayout>
 
 
@@ -53,14 +53,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Delivery Address"
+        android:text="Địa chỉ giao"
         android:textColor="#444"
         android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/tvPhoneNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tvAddress"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Flat No 404, Skyline Apartments, Vizag - 500576" />
+        android:layout_height="wrap_content" />
 
     <Button
         android:layout_width="match_parent"
@@ -68,7 +73,7 @@
         android:layout_marginTop="20dp"
         android:background="#000"
         android:foreground="?attr/selectableItemBackground"
-        android:text="PROCEED PAYMENT"
+        android:text="Nhận Đơn"
         android:textColor="#fff" />
 
 </LinearLayout>

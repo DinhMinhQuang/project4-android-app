@@ -3,10 +3,11 @@ package fpt.aptech.project4_android_app.api.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-public class Order {
+public class Order implements Serializable {
     @SerializedName("_id")
     @Expose
     private String id;

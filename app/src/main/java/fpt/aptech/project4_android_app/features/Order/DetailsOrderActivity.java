@@ -9,11 +9,15 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import fpt.aptech.project4_android_app.MainActivity;
 import fpt.aptech.project4_android_app.R;
@@ -38,6 +42,7 @@ public class DetailsOrderActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         View bottomSheet = findViewById(R.id.bottom_sheet);
         sheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        getDetailsOrder();
     }
     public boolean onOptionsItemSelected(MenuItem item){
         Intent myIntent = new Intent(getApplicationContext(), MainActivity.class);
@@ -49,24 +54,27 @@ public class DetailsOrderActivity extends AppCompatActivity {
         sp = this.getApplication().getSharedPreferences(PREFS, Context.MODE_PRIVATE);
         String jwt = sp.getString("jwt", null);
         String access_token = "JWT "+jwt;
-        Intent intentId =new Intent();
-        String id = intentId.getStringExtra("orderId");
-        Call<Order> call= orderClient.getOrder(access_token, id);
+        String idOrder = sp.getString("orderId", null);
+        Call<Order> call = orderClient.getOrder(access_token, idOrder);
         call.enqueue(new Callback<Order>() {
             @Override
             public void onResponse(Call<Order> call, Response<Order> response) {
-                if(!response.isSuccessful()){
-                    return;
-                }
-                else {
-                    Order order = response.body();
-                    Toast.makeText(DetailsOrderActivity.this, "Connected", Toast.LENGTH_SHORT).show();
-                }
+                Order order = response.body();
+                List<Map<String, Object>> list=new ArrayList<>();
+                list.add((Map<String, Object>) order);
+                Map<String,Object> map = new HashMap<>();
+                map.put("_id", order.getId());
+                map.put("amount", order.getAmount());
+                map.put("address", order.getAddress());
+                list.add(map);
+                String fromArray[]={"_id","amount", "address"};
+                int to[]={R.id.tvStore,R.id.tvAmount, R.id.tvAddress};
+                SimpleAdapter adapter = new SimpleAdapter(getApplication(), list, R.layout.bottom_sheet, fromArray, to);
             }
 
             @Override
             public void onFailure(Call<Order> call, Throwable t) {
-                Toast.makeText(DetailsOrderActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(DetailsOrderActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
