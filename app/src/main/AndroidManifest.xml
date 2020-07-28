@@ -16,8 +16,9 @@
         android:targetSandboxVersion="1"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="${cleartextTrafficPermitted}">
-        <activity android:name=".SplashActivity"></activity>
-        <activity android:name=".features.Logon.RegisterActivity"></activity>
+        <activity android:name=".features.Order.DetailsOrderActivity"></activity>
+        <activity android:name=".SplashActivity" />
+        <activity android:name=".features.Logon.RegisterActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".NewShipperActivity">
             <intent-filter>
@@ -28,7 +29,7 @@
         </activity>
         <activity
             android:name=".features.Logon.LoginActivity"
-            android:windowSoftInputMode="adjustResize"></activity>
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>

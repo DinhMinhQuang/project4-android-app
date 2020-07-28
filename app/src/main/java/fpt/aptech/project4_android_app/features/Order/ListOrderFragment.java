@@ -1,6 +1,7 @@
 package fpt.aptech.project4_android_app.features.Order;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -9,13 +10,14 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -67,7 +69,6 @@ public class ListOrderFragment extends Fragment {
         return fragment;
     }
     ListView listView;
-    List<Order> orders;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +77,7 @@ public class ListOrderFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-    private void getOrder() throws IOException {
+    private void getOrder(){
         sp = this.getActivity().getSharedPreferences(PREFS, Context.MODE_PRIVATE);
         String jwt = sp.getString("jwt", null);
         String access_token = "JWT "+jwt;
@@ -88,16 +89,41 @@ public class ListOrderFragment extends Fragment {
                     return;
                 }
                 else {
+                    String fromArray[]={"address","status", "amount"};
+                    int to[]={R.id.tvStore,R.id.tvDistance, R.id.tvPrice};
+                    List<Order> orders = response.body();
+                    List<Map<String, Object>> list=new ArrayList<>();
 
+                    for (Order order:
+                         orders) {
+                        Map<String,Object> map = new HashMap<>();
+                        map.put("_id", order.getId());
+                        map.put("address",order.getAddress());
+                        map.put("status",order.getStatus());
+                        map.put("amount",order.getAmount());
+                        list.add(map);
+                    }
+
+                    SimpleAdapter simpleAdapter = new SimpleAdapter(getActivity(), list, R.layout.order_details, fromArray, to);
+                    listView.setAdapter(simpleAdapter);
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            Intent intent = new Intent(getActivity(), DetailsOrderActivity.class);
+                            intent.putExtra("orderId", String.valueOf(list.get(i).get("_id")));
+                            startActivity(intent);
+                        }
+                    });
                 }
             }
 
             @Override
             public void onFailure(Call<List<Order>> call, Throwable t) {
-//                Toast.makeText(getActivity(), , Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
+
             }
         });
-        Toast.makeText(getActivity(), "Cant Pass", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -106,11 +132,8 @@ public class ListOrderFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_list_order, container, false);
         // Inflate the layout for this fragment
         listView = view.findViewById(R.id.listView);
-        try {
-            getOrder();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        listView.setDivider(null);
+        getOrder();
         return view;
     }
 }
