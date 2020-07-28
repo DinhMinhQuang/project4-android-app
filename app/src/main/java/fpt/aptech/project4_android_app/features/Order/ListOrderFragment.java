@@ -122,7 +122,9 @@ public class ListOrderFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<Order>> call, Throwable t) {
+
                 Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
+
             }
         });
     }
