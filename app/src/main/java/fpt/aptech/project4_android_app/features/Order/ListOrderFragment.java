@@ -1,5 +1,10 @@
 package fpt.aptech.project4_android_app.features.Order;
 
+import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.IO;
+import com.github.nkzawa.socketio.client.Socket;
+import com.google.gson.Gson;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,14 +15,17 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -47,7 +55,7 @@ public class ListOrderFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    List<Order> orders;
     public ListOrderFragment() {
 
     }
@@ -61,6 +69,7 @@ public class ListOrderFragment extends Fragment {
      * @return A new instance of fragment ListOrderFragment.
      */
     // TODO: Rename and change types and number of parameters
+
     public static ListOrderFragment newInstance(String param1, String param2) {
         ListOrderFragment fragment = new ListOrderFragment();
         Bundle args = new Bundle();
@@ -68,6 +77,11 @@ public class ListOrderFragment extends Fragment {
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
+    }
+    private Socket mSocket;{
+        try {
+            mSocket = IO.socket("http://9ee90597ece5.ngrok.io");
+        } catch (URISyntaxException e) {}
     }
     ListView listView;
     @Override
@@ -77,7 +91,11 @@ public class ListOrderFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        orders = new ArrayList<>();
+        mSocket.connect();
+        mSocket.on("newOrder", order);
     }
+
     private void getOrder(){
         sp = this.getActivity().getSharedPreferences(PREFS, Context.MODE_PRIVATE);
         edit = sp.edit();
@@ -93,7 +111,7 @@ public class ListOrderFragment extends Fragment {
                 else {
                     String fromArray[]={"address","status", "amount"};
                     int to[]={R.id.tvStore,R.id.tvDistance, R.id.tvPrice};
-                    List<Order> orders = response.body();
+                    orders = response.body();
                     List<Map<String, Object>> list=new ArrayList<>();
 
                     for (Order order:
@@ -128,6 +146,37 @@ public class ListOrderFragment extends Fragment {
             }
         });
     }
+
+    private Emitter.Listener order = args -> getActivity().runOnUiThread(() -> {
+        JSONObject data = (JSONObject) args[0];
+        Gson gson = new Gson();
+        Order order = gson.fromJson(data.toString(), Order.class);
+        orders.add(order);
+        List<Map<String, Object>> list=new ArrayList<>();
+
+        for (Order item:
+                orders) {
+            Map<String,Object> map = new HashMap<>();
+            map.put("_id", item.getId());
+            map.put("address",item.getAddress());
+            map.put("status",item.getStatus());
+            map.put("amount",item.getAmount());
+            list.add(map);
+        }
+        String fromArray[]={"address","status", "amount"};
+        int to[]={R.id.tvStore,R.id.tvDistance, R.id.tvPrice};
+        SimpleAdapter simpleAdapter;
+        if (getActivity() != null) {
+            simpleAdapter = new SimpleAdapter(getActivity(), list, R.layout.order_details, fromArray, to);
+            listView.setAdapter(simpleAdapter);
+        }
+        listView.setOnItemClickListener((adapterView, view, i, l) -> {
+            Intent intent = new Intent(getActivity(), DetailsOrderActivity.class);
+            edit.putString("orderId", String.valueOf(list.get(i).get("_id")));
+            edit.apply();
+            startActivity(intent);
+        });
+    });
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
