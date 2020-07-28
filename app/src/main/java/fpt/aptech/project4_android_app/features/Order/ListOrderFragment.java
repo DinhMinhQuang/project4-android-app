@@ -94,7 +94,7 @@ public class ListOrderFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<Order>> call, Throwable t) {
-                Toast.makeText(getActivity(), , Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), , Toast.LENGTH_SHORT).show();
             }
         });
         Toast.makeText(getActivity(), "Cant Pass", Toast.LENGTH_SHORT).show();
