@@ -9,48 +9,49 @@ import java.util.Map;
 public class Order {
     @SerializedName("_id")
     @Expose
-    private String _id;
-    @SerializedName("user")
+    private String id;
+    @SerializedName("note")
     @Expose
-    private String user;
-    @SerializedName("products")
-    @Expose
-    private List<String> products;
+    private String note;
     @SerializedName("address")
     @Expose
     private String address;
     @SerializedName("amount")
     @Expose
     private Double amount;
-    @SerializedName("shipperId")
+    @SerializedName("user")
     @Expose
-    private String shipperId;
+    private String user;
+    @SerializedName("products")
+    @Expose
+    private List<Product> products;
     @SerializedName("status")
     @Expose
     private String status;
+    @SerializedName("createdAt")
+    @Expose
+    private String createdAt;
+    @SerializedName("updatedAt")
+    @Expose
+    private String updatedAt;
+    @SerializedName("__v")
+    @Expose
+    private Integer v;
 
-    public String get_id() {
-        return _id;
+    public String getId() {
+        return id;
     }
 
-    public void set_id(String _id) {
-        this._id = _id;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getUser() {
-        return user;
+    public String getNote() {
+        return note;
     }
 
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    public List<String> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<String> products) {
-        this.products = products;
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public String getAddress() {
@@ -69,12 +70,20 @@ public class Order {
         this.amount = amount;
     }
 
-    public String getShipperId() {
-        return shipperId;
+    public String getUser() {
+        return user;
     }
 
-    public void setShipperId(String shipperId) {
-        this.shipperId = shipperId;
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 
     public String getStatus() {
@@ -83,5 +92,29 @@ public class Order {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Integer getV() {
+        return v;
+    }
+
+    public void setV(Integer v) {
+        this.v = v;
     }
 }

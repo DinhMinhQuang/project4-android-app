@@ -12,7 +12,6 @@ import com.auth0.android.jwt.JWT;
 import com.google.android.material.tabs.TabLayout;
 
 import fpt.aptech.project4_android_app.features.Map.MapFragment;
-import fpt.aptech.project4_android_app.features.Order.DetailsOrderFragment;
 import fpt.aptech.project4_android_app.features.Order.ListOrderFragment;
 import fpt.aptech.project4_android_app.features.Profile.ShipperProfileFragment;
 import fpt.aptech.project4_android_app.features.Statistics.StatisticsFragment;
@@ -37,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSupportActionBar().setTitle("Foot Tap Delivery");
         ListOrderFragment listOrderFragment = new ListOrderFragment();
         JWT jwt = (JWT) getIntent().getParcelableExtra("jwt");
         Bundle bundle = new Bundle();
@@ -54,15 +54,12 @@ public class MainActivity extends AppCompatActivity {
                         replaceFragment(new ListOrderFragment());
                         break;
                     case 1:
-                        replaceFragment(new DetailsOrderFragment());
-                        break;
-                    case 2:
                         replaceFragment(new MapFragment());
                         break;
-                    case 3:
+                    case 2:
                         replaceFragment(new StatisticsFragment());
                         break;
-                    case 4:
+                    case 3:
                         replaceFragment(new ShipperProfileFragment());
                         break;
                 }
