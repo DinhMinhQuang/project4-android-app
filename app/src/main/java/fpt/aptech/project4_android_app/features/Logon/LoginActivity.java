@@ -28,7 +28,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LoginActivity extends AppCompatActivity {
+public class
+LoginActivity extends AppCompatActivity {
     public static final String PREFS = "PREFS";
     ShipperClient shipperClient = RetroClass.getRetrofitInstance().create(ShipperClient.class);
     SharedPreferences sp;
