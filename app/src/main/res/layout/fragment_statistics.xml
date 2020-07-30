@@ -191,7 +191,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tvIdCard"
+                android:id="@+id/tvAmount"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"

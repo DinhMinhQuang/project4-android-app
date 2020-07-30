@@ -16,6 +16,8 @@ public interface ShipperClient {
     @GET("/shipper/getMyShipper")
     Call<Shipper> getShipperDetails(@Header("Authorization") String access_token);
 
+    @GET("/shipper/getMyOrders")
+    Call<List<Order>> getMyOrders(@Header("Authorization") String access_token);
     @GET("/shipper/getMyCompletedOrders")
     Call<List<Order>> getMyCompletedOrder(@Header("Authorization") String access_token);
 

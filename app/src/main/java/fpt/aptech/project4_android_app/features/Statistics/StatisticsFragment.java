@@ -57,7 +57,7 @@ public class StatisticsFragment extends Fragment {
         return fragment;
     }
     LinearLayout redirectAcceptOrder, redirectFailOrder;
-    TextView tvAcceptOrder, tvFailOrder;
+    TextView tvAcceptOrder, tvFailOrder, tvAmount;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,52 +67,35 @@ public class StatisticsFragment extends Fragment {
         }
     }
 
-    private void countCompletedOrder(){
+    private void statistics(){
         sp = this.getActivity().getSharedPreferences(PREFS, Context.MODE_PRIVATE);
         edit = sp.edit();
         String jwt = sp.getString("jwt", null);
         String access_token = "JWT "+jwt;
-        Call<List<Order>> call = shipperClient.getMyCompletedOrder(access_token);
+        Call<List<Order>> call = shipperClient.getMyOrders(access_token);
         call.enqueue(new Callback<List<Order>>() {
             @Override
             public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
-                if (!response.isSuccessful()){
-                    return;
-                }
+                if (!response.isSuccessful()) return;
                 else {
-                    int count = 0;
+                    int countFailed = 0;
+                    int countComplete = 0;
+                    double sumAmount = 0;
+                    double realAmount = 0;
                     List<Order> orders = response.body();
-                    for (Order item : orders){
-                        count++;
+                    for(Order order: orders){
+                        if (order.getStatus().equalsIgnoreCase("completed")){
+                            countComplete++;
+                        }
+                        if (order.getStatus().equalsIgnoreCase("failed")) {
+                            countFailed++;
+                        }
+                        sumAmount += order.getAmount();
+                        realAmount = (sumAmount * 100)/80;
                     }
-                    tvAcceptOrder.setText(String.valueOf(count));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Order>> call, Throwable t) {
-                Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-    private void countFailedOrder(){
-        sp = this.getActivity().getSharedPreferences(PREFS, Context.MODE_PRIVATE);
-        edit = sp.edit();
-        String jwt = sp.getString("jwt", null);
-        String access_token = "JWT "+jwt;
-        Call<List<Order>> call = shipperClient.getMyFailedOrder(access_token);
-        call.enqueue(new Callback<List<Order>>() {
-            @Override
-            public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
-                if(!response.isSuccessful()) return;
-                else {
-                    int count = 0;
-                    List<Order> orders = response.body();
-                    for (Order item : orders){
-                        count++;
-                    }
-                    tvFailOrder.setText(count);
+                    tvFailOrder.setText(String.valueOf(countFailed));
+                    tvAcceptOrder.setText(String.valueOf(countComplete));
+                    tvAmount.setText(String.valueOf(realAmount));
                 }
             }
 
@@ -131,6 +114,7 @@ public class StatisticsFragment extends Fragment {
         redirectFailOrder = view.findViewById(R.id.redirectFailOrder);
         tvAcceptOrder = view.findViewById(R.id.tvAcceptOrder);
         tvFailOrder = view.findViewById(R.id.tvFailOrder);
+        tvAmount = view.findViewById(R.id.tvAmount);
         redirectAcceptOrder.setOnClickListener(view1 -> {
             Intent intent = new Intent(getActivity(), CompletedOrderActivity.class);
             startActivity(intent);
@@ -139,8 +123,7 @@ public class StatisticsFragment extends Fragment {
             Intent intent = new Intent(getActivity(), FailedOrderActivity.class);
             startActivity(intent);
         });
-        countCompletedOrder();
-        countFailedOrder();
+        statistics();
         return view;
     }
 }

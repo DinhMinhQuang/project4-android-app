@@ -111,7 +111,6 @@ public class ShipperProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
         tvFullName = view.findViewById(R.id.tvFullName);
-        tvIdCard = view.findViewById(R.id.tvIdCard);
         tvDob = view.findViewById(R.id.tvDob);
         tvPhoneNumber = view.findViewById(R.id.tvPhoneNumber);
         tvGender = view.findViewById(R.id.tvGender);
