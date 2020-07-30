@@ -33,6 +33,7 @@ import fpt.aptech.project4_android_app.R;
 import fpt.aptech.project4_android_app.api.models.Order;
 import fpt.aptech.project4_android_app.api.network.RetroClass;
 import fpt.aptech.project4_android_app.api.service.OrderClient;
+import io.goong.goongsdk.Goong;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -80,7 +81,7 @@ public class ListOrderFragment extends Fragment {
     }
     private Socket mSocket;{
         try {
-            mSocket = IO.socket("http://9ee90597ece5.ngrok.io");
+            mSocket = IO.socket("http://8d054773c784.ngrok.io");
         } catch (URISyntaxException e) {}
     }
     ListView listView;

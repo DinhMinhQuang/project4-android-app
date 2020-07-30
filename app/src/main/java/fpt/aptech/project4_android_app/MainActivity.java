@@ -11,10 +11,10 @@ import android.widget.FrameLayout;
 import com.auth0.android.jwt.JWT;
 import com.google.android.material.tabs.TabLayout;
 
-import fpt.aptech.project4_android_app.features.Map.MapFragment;
 import fpt.aptech.project4_android_app.features.Order.ListOrderFragment;
 import fpt.aptech.project4_android_app.features.Profile.ShipperProfileFragment;
 import fpt.aptech.project4_android_app.features.Statistics.StatisticsFragment;
+import io.goong.goongsdk.Goong;
 
 public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Goong.getInstance(this, "euoRPJxMMVNHI30YkR2W5Ysh6zzkLul70rxTptlF");
         setContentView(R.layout.activity_main);
         getSupportActionBar().setTitle("Foot Tap Delivery");
         ListOrderFragment listOrderFragment = new ListOrderFragment();
@@ -54,12 +55,9 @@ public class MainActivity extends AppCompatActivity {
                         replaceFragment(new ListOrderFragment());
                         break;
                     case 1:
-                        replaceFragment(new MapFragment());
-                        break;
-                    case 2:
                         replaceFragment(new StatisticsFragment());
                         break;
-                    case 3:
+                    case 2:
                         replaceFragment(new ShipperProfileFragment());
                         break;
                 }

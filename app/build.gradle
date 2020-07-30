@@ -35,6 +35,10 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'com.github.nkzawa:socket.io-client:0.6.0'
+    implementation('io.goong.goongsdk:goong-android-sdk:2.1.0'){
+        transitive=true
+    }
+    implementation 'io.goong.goongsdk.geocoder:goong-android-geocoder:1.0'
     //noinspection GradleCompatible
     implementation 'com.android.support:design:26.1.0'
     implementation 'com.google.android.material:material:1.1.0'
