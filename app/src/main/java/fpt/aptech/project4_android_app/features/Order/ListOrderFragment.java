@@ -81,7 +81,7 @@ public class ListOrderFragment extends Fragment {
     }
     private Socket mSocket;{
         try {
-            mSocket = IO.socket("http://8d054773c784.ngrok.io");
+            mSocket = IO.socket("http://d1649a934d34.ngrok.io");
         } catch (URISyntaxException e) {}
     }
     ListView listView;

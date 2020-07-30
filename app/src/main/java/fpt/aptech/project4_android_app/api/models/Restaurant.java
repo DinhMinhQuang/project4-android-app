@@ -26,6 +26,9 @@ public class Restaurant {
     @SerializedName("verified")
     @Expose
     private Boolean verified;
+    @SerializedName("address")
+    @Expose
+    private String address;
     @SerializedName("managers")
     @Expose
     private List<User> managers = null;

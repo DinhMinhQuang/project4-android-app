@@ -18,7 +18,9 @@
         android:targetSandboxVersion="1"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="${cleartextTrafficPermitted}">
-        <activity android:name=".features.Map.MapActivity"></activity>
+        <activity android:name=".features.Statistics.FailedOrderActivity"></activity>
+        <activity android:name=".features.Statistics.CompletedOrderActivity" />
+        <activity android:name=".features.Map.MapActivity" />
         <activity android:name=".features.Order.DetailsOrderActivity" />
         <activity android:name=".SplashActivity" />
         <activity android:name=".features.Logon.RegisterActivity" />
@@ -33,6 +35,7 @@
         <activity
             android:name=".features.Logon.LoginActivity"
             android:windowSoftInputMode="adjustResize" />
+
         <service android:name="io.goong.goongsdk.telemetry.TelemetryService" />
     </application>
 

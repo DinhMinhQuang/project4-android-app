@@ -20,12 +20,15 @@ public class Order implements Serializable {
     @SerializedName("amount")
     @Expose
     private Double amount;
+    @SerializedName("restaurant")
+    @Expose
+    private Restaurant restaurant;
     @SerializedName("user")
     @Expose
-    private String user;
+    private User user;
     @SerializedName("products")
     @Expose
-    private List<Product> products;
+    private List<Map<String, ?>> products;
     @SerializedName("status")
     @Expose
     private String status;
@@ -71,19 +74,27 @@ public class Order implements Serializable {
         this.amount = amount;
     }
 
-    public String getUser() {
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
+    }
+
+    public User getUser() {
         return user;
     }
 
-    public void setUser(String user) {
+    public void setUser(User user) {
         this.user = user;
     }
 
-    public List<Product> getProducts() {
+    public List<Map<String, ?>> getProducts() {
         return products;
     }
 
-    public void setProducts(List<Product> products) {
+    public void setProducts(List<Map<String, ?>> products) {
         this.products = products;
     }
 

@@ -1,5 +1,8 @@
 package fpt.aptech.project4_android_app.features.Statistics;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,8 +10,22 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import fpt.aptech.project4_android_app.R;
+import fpt.aptech.project4_android_app.api.models.Order;
+import fpt.aptech.project4_android_app.api.models.Shipper;
+import fpt.aptech.project4_android_app.api.network.RetroClass;
+import fpt.aptech.project4_android_app.api.service.ShipperClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,12 +34,12 @@ import fpt.aptech.project4_android_app.R;
  */
 public class StatisticsFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
+    public static final String PREFS = "PREFS";
+    ShipperClient shipperClient = RetroClass.getRetrofitInstance().create(ShipperClient.class);
+    SharedPreferences sp;
+    SharedPreferences.Editor edit;
     private String mParam1;
     private String mParam2;
 
@@ -30,15 +47,7 @@ public class StatisticsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment StatisticsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+
     public static StatisticsFragment newInstance(String param1, String param2) {
         StatisticsFragment fragment = new StatisticsFragment();
         Bundle args = new Bundle();
@@ -47,7 +56,8 @@ public class StatisticsFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-
+    LinearLayout redirectAcceptOrder, redirectFailOrder;
+    TextView tvAcceptOrder, tvFailOrder;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,10 +67,80 @@ public class StatisticsFragment extends Fragment {
         }
     }
 
+    private void countCompletedOrder(){
+        sp = this.getActivity().getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        edit = sp.edit();
+        String jwt = sp.getString("jwt", null);
+        String access_token = "JWT "+jwt;
+        Call<List<Order>> call = shipperClient.getMyCompletedOrder(access_token);
+        call.enqueue(new Callback<List<Order>>() {
+            @Override
+            public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
+                if (!response.isSuccessful()){
+                    return;
+                }
+                else {
+                    int count = 0;
+                    List<Order> orders = response.body();
+                    for (Order item : orders){
+                        count++;
+                    }
+                    tvAcceptOrder.setText(String.valueOf(count));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Order>> call, Throwable t) {
+                Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void countFailedOrder(){
+        sp = this.getActivity().getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        edit = sp.edit();
+        String jwt = sp.getString("jwt", null);
+        String access_token = "JWT "+jwt;
+        Call<List<Order>> call = shipperClient.getMyFailedOrder(access_token);
+        call.enqueue(new Callback<List<Order>>() {
+            @Override
+            public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
+                if(!response.isSuccessful()) return;
+                else {
+                    int count = 0;
+                    List<Order> orders = response.body();
+                    for (Order item : orders){
+                        count++;
+                    }
+                    tvFailOrder.setText(count);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Order>> call, Throwable t) {
+                Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_statistics, container, false);
+        View view = inflater.inflate(R.layout.fragment_statistics, container, false);
+        redirectAcceptOrder = view.findViewById(R.id.redirectAcceptOrder);
+        redirectFailOrder = view.findViewById(R.id.redirectFailOrder);
+        tvAcceptOrder = view.findViewById(R.id.tvAcceptOrder);
+        tvFailOrder = view.findViewById(R.id.tvFailOrder);
+        redirectAcceptOrder.setOnClickListener(view1 -> {
+            Intent intent = new Intent(getActivity(), CompletedOrderActivity.class);
+            startActivity(intent);
+        });
+        redirectFailOrder.setOnClickListener(view12 -> {
+            Intent intent = new Intent(getActivity(), FailedOrderActivity.class);
+            startActivity(intent);
+        });
+        countCompletedOrder();
+        countFailedOrder();
+        return view;
     }
 }

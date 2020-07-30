@@ -50,7 +50,7 @@ public class DetailsOrderActivity extends AppCompatActivity {
     private void getDetailsOrder(){
         tvStoreName = findViewById(R.id.tvStoreName);
         tvAmount = findViewById(R.id.tvAmount);
-        tvUserName = findViewById(R.id.tvUserName);
+        tvUserName = findViewById(R.id.tvFullName);
         tvPhoneNumber = findViewById(R.id.tvPhoneNumber);
         tvAddress = findViewById(R.id.tvAddress);
         btnMap = findViewById(R.id.btnMap);
@@ -69,7 +69,7 @@ public class DetailsOrderActivity extends AppCompatActivity {
                     Order order = response.body();
                     tvStoreName.setText(order.getCreatedAt());
                     tvAmount.setText(Double.toString(order.getAmount()));
-                    tvUserName.setText(order.getUser());
+                    tvUserName.setText(order.getUser().getFullname());
                     tvPhoneNumber.setText(order.getNote());
                     tvAddress.setText(order.getAddress());
                 }
@@ -99,10 +99,9 @@ public class DetailsOrderActivity extends AppCompatActivity {
                         return;
                     }
                     else {
-                        Order order = response.body();
+                        response.body();
                         Intent intent = new Intent(getApplication(), MapActivity.class);
                         startActivity(intent);
-
                     }
                 }
 
