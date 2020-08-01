@@ -3,6 +3,7 @@ package fpt.aptech.project4_android_app.features.Profile;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -15,9 +16,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.auth0.android.jwt.JWT;
+import com.squareup.picasso.Picasso;
 
 import java.util.Date;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import fpt.aptech.project4_android_app.R;
 import fpt.aptech.project4_android_app.api.models.Shipper;
 import fpt.aptech.project4_android_app.api.network.RetroClass;
@@ -64,7 +67,8 @@ public class ShipperProfileFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-    TextView tvFullName, tvIdCard, tvDob, tvPhoneNumber, tvGender;
+    TextView tvFullName, tvAmount, tvDob, tvPhoneNumber, tvGender;
+    CircleImageView profile;
     Button btnChangePassword;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,8 +96,9 @@ public class ShipperProfileFragment extends Fragment {
                     tvFullName.setText(shipper.getFullname());
                     tvDob.setText(String.valueOf(shipper.getDob()));
                     tvGender.setText(shipper.getGender() ? "Nam" : "Nữ");
-                    tvIdCard.setText(shipper.getIdCard());
+                    tvAmount.setText(shipper.getIdCard());
                     tvPhoneNumber.setText(shipper.getPhone());
+                    Picasso.get().load("http://1ec6fbf93c32.ngrok.io/public/image/"+shipper.getAvatar()).into(profile);
                 }
             }
 
@@ -104,16 +109,16 @@ public class ShipperProfileFragment extends Fragment {
         });
     }
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_profile, container, false);
         tvFullName = view.findViewById(R.id.tvFullName);
+        profile = view.findViewById(R.id.profile);
         tvDob = view.findViewById(R.id.tvDob);
         tvPhoneNumber = view.findViewById(R.id.tvPhoneNumber);
         tvGender = view.findViewById(R.id.tvGender);
+        tvAmount = view.findViewById(R.id.tvAmount);
         btnChangePassword = view.findViewById(R.id.btnChangePassword);
         getProfileUser();
         btnChangePassword.setOnClickListener(new View.OnClickListener() {

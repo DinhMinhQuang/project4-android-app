@@ -36,7 +36,6 @@
             android:name=".features.Logon.LoginActivity"
             android:windowSoftInputMode="adjustResize" />
 
-        <service android:name="io.goong.goongsdk.telemetry.TelemetryService" />
     </application>
 
 </manifest>

@@ -1,14 +1,11 @@
 package fpt.aptech.project4_android_app.api.network;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RetroClass {
+public class RetroMap {
     private static Retrofit retrofit;
-    private static final String BASE_URL = "http://1ec6fbf93c32.ngrok.io";
+    private static final String BASE_URL = "https://rsapi.goong.io/";
 
     public static Retrofit getRetrofitInstance() {
         if (retrofit == null) {

@@ -19,7 +19,7 @@
         android:weightSum="3">
 
         <TextView
-            android:id="@+id/tvStore"
+            android:id="@+id/tvStoreName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"

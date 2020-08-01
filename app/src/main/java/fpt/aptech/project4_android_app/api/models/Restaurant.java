@@ -48,6 +48,14 @@ public class Restaurant {
     @Expose
     private Integer v;
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public List<Object> getMenus() {
         return menus;
     }

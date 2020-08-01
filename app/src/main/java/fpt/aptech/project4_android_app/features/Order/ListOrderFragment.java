@@ -81,7 +81,7 @@ public class ListOrderFragment extends Fragment {
     }
     private Socket mSocket;{
         try {
-            mSocket = IO.socket("http://d1649a934d34.ngrok.io");
+            mSocket = IO.socket("http://1ec6fbf93c32.ngrok.io");
         } catch (URISyntaxException e) {}
     }
     ListView listView;
@@ -110,29 +110,15 @@ public class ListOrderFragment extends Fragment {
                     return;
                 }
                 else {
-                    String fromArray[]={"address","status", "amount"};
-                    int to[]={R.id.tvStore,R.id.tvDistance, R.id.tvPrice};
                     orders = response.body();
-                    List<Map<String, Object>> list=new ArrayList<>();
-
-                    for (Order order:
-                         orders) {
-                        Map<String,Object> map = new HashMap<>();
-                        map.put("_id", order.getId());
-                        map.put("address",order.getAddress());
-                        map.put("status",order.getStatus());
-                        map.put("amount",order.getAmount());
-                        list.add(map);
-                    }
-
-                    SimpleAdapter simpleAdapter;
+                    CustomAdapter customAdapter;
                     if (getActivity() != null) {
-                        simpleAdapter = new SimpleAdapter(getActivity(), list, R.layout.order_details, fromArray, to);
-                        listView.setAdapter(simpleAdapter);
+                        customAdapter = new CustomAdapter(getActivity(), R.layout.order_details, orders);
+                        listView.setAdapter(customAdapter);
                     }
                     listView.setOnItemClickListener((adapterView, view, i, l) -> {
                         Intent intent = new Intent(getActivity(), DetailsOrderActivity.class);
-                        edit.putString("orderId", String.valueOf(list.get(i).get("_id")));
+                        edit.putString("orderId", orders.get(i).getId());
                         edit.apply();
                         startActivity(intent);
                     });
@@ -164,16 +150,14 @@ public class ListOrderFragment extends Fragment {
             map.put("amount",item.getAmount());
             list.add(map);
         }
-        String fromArray[]={"address","status", "amount"};
-        int to[]={R.id.tvStore,R.id.tvDistance, R.id.tvPrice};
-        SimpleAdapter simpleAdapter;
+        CustomAdapter customAdapter;
         if (getActivity() != null) {
-            simpleAdapter = new SimpleAdapter(getActivity(), list, R.layout.order_details, fromArray, to);
-            listView.setAdapter(simpleAdapter);
+            customAdapter = new CustomAdapter(getActivity(), R.layout.order_details, orders);
+            listView.setAdapter(customAdapter);
         }
         listView.setOnItemClickListener((adapterView, view, i, l) -> {
             Intent intent = new Intent(getActivity(), DetailsOrderActivity.class);
-            edit.putString("orderId", String.valueOf(list.get(i).get("_id")));
+            edit.putString("orderId", orders.get(i).getId());
             edit.apply();
             startActivity(intent);
         });

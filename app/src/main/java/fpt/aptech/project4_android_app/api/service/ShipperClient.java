@@ -18,6 +18,7 @@ public interface ShipperClient {
 
     @GET("/shipper/getMyOrders")
     Call<List<Order>> getMyOrders(@Header("Authorization") String access_token);
+
     @GET("/shipper/getMyCompletedOrders")
     Call<List<Order>> getMyCompletedOrder(@Header("Authorization") String access_token);
 
@@ -32,6 +33,15 @@ public interface ShipperClient {
 
     @POST("/shipper/acceptOrder/{id}")
     Call<Order> acceptOrder(@Header("Authorization") String access_token, @Path("id") String idOrder);
+
+    @POST("/shipper/deliveringOrder/{id}")
+    Call<Order> deliveringOrder(@Header("Authorization") String access_token, @Path("id") String idOrder);
+
+    @POST("/shipper/completeOrder/{id}")
+    Call<Order> completeOrder(@Header("Authorization") String access_token, @Path("id") String idOrder);
+
+    @POST("/shipper/cancelOrder/{id}")
+    Call<Order> cancelOrder(@Header("Authorization") String access_token, @Path("id") String idOrder);
 
 
 }
