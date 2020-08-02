@@ -19,19 +19,13 @@ public class NewShipperActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Foot Tap Delivery");
         btnSignIn =(Button) findViewById(R.id.btnSignIn);
         btnRegister = (Button) findViewById(R.id.btnRegister);
-        btnSignIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(NewShipperActivity.this, LoginActivity.class);
-                startActivity(intent);
-            }
+        btnSignIn.setOnClickListener(view -> {
+            Intent intent = new Intent(NewShipperActivity.this, LoginActivity.class);
+            startActivity(intent);
         });
-        btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
-                startActivity(intent);
-            }
+        btnRegister.setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
+            startActivity(intent);
         });
     }
 }

@@ -42,6 +42,4 @@ public interface ShipperClient {
 
     @POST("/shipper/cancelOrder/{id}")
     Call<Order> cancelOrder(@Header("Authorization") String access_token, @Path("id") String idOrder);
-
-
 }

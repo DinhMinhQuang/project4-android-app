@@ -86,16 +86,16 @@ public class StatisticsFragment extends Fragment {
                     for(Order order: orders){
                         if (order.getStatus().equalsIgnoreCase("completed")){
                             countComplete++;
+                            sumAmount += order.getFee();
+                            realAmount = (sumAmount * 80)/100;
                         }
-                        if (order.getStatus().equalsIgnoreCase("failed")) {
+                        if (order.getStatus().equalsIgnoreCase("canceled")) {
                             countFailed++;
                         }
-                        sumAmount += order.getAmount();
-                        realAmount = (sumAmount * 100)/80;
                     }
                     tvFailOrder.setText(String.valueOf(countFailed));
                     tvAcceptOrder.setText(String.valueOf(countComplete));
-                    tvAmount.setText(String.valueOf(realAmount));
+                    tvAmount.setText(String.valueOf(realAmount).toString().split("\\.")[0]+"đ");
                 }
             }
 

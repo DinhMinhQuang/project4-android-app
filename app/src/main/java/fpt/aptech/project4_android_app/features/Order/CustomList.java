@@ -38,11 +38,11 @@ public class CustomList extends SimpleAdapter {
         TextView tvProductName = vi.findViewById(R.id.tvProductName);
         tvProductName.setText(String.valueOf(data.get("productName")));
         TextView tvProductPrice = vi.findViewById(R.id.tvProductPrice);
-        tvProductPrice.setText(String.valueOf(data.get("price")));
+        tvProductPrice.setText(String.valueOf(data.get("price")).split("\\.")[0] +"đ");
         TextView tvQuantity = vi.findViewById(R.id.tvQuantity);
         tvQuantity.setText("x" +(data.get("quantity").toString().split("\\.")[0]));
         ImageView imgProductDetails = vi.findViewById(R.id.imgProductDetails);
-        Picasso.get().load("http://1ec6fbf93c32.ngrok.io/public/image/" + data.get("image")).into(imgProductDetails);
+        Picasso.get().load("http://711c70445b85.ngrok.io/public/image/" + data.get("image")).into(imgProductDetails);
         return vi;
     }
 }

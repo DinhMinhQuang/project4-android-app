@@ -10,12 +10,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
@@ -33,6 +38,7 @@ import fpt.aptech.project4_android_app.R;
 import fpt.aptech.project4_android_app.api.models.Order;
 import fpt.aptech.project4_android_app.api.network.RetroClass;
 import fpt.aptech.project4_android_app.api.service.OrderClient;
+import fpt.aptech.project4_android_app.features.TouchHelper.MyItemTouchHelper;
 import io.goong.goongsdk.Goong;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -53,6 +59,7 @@ public class ListOrderFragment extends Fragment {
     OrderClient orderClient = RetroClass.getRetrofitInstance().create(OrderClient.class);
     SharedPreferences sp;
     SharedPreferences.Editor edit;
+    CustomAdapter customAdapter;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -81,10 +88,11 @@ public class ListOrderFragment extends Fragment {
     }
     private Socket mSocket;{
         try {
-            mSocket = IO.socket("http://1ec6fbf93c32.ngrok.io");
+            mSocket = IO.socket("http://711c70445b85.ngrok.io");
         } catch (URISyntaxException e) {}
     }
-    ListView listView;
+    RecyclerView listView;
+    ProgressBar listProcessBar;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,17 +119,23 @@ public class ListOrderFragment extends Fragment {
                 }
                 else {
                     orders = response.body();
-                    CustomAdapter customAdapter;
+
                     if (getActivity() != null) {
-                        customAdapter = new CustomAdapter(getActivity(), R.layout.order_details, orders);
+                        customAdapter = new CustomAdapter(getActivity(), orders);
+                        ItemTouchHelper.Callback callback = new MyItemTouchHelper(customAdapter);
+                        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
+                        customAdapter.setTouchHelper(itemTouchHelper);
+                        itemTouchHelper.attachToRecyclerView(listView);
                         listView.setAdapter(customAdapter);
+                        listView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                        listProcessBar.setVisibility(View.GONE);
                     }
-                    listView.setOnItemClickListener((adapterView, view, i, l) -> {
-                        Intent intent = new Intent(getActivity(), DetailsOrderActivity.class);
-                        edit.putString("orderId", orders.get(i).getId());
-                        edit.apply();
-                        startActivity(intent);
-                    });
+//                    listView.setOnItemClickListener((adapterView, view, i, l) -> {
+//                        Intent intent = new Intent(getActivity(), DetailsOrderActivity.class);
+//                        edit.putString("orderId", orders.get(i).getId());
+//                        edit.apply();
+//                        startActivity(intent);
+//                    });
                 }
             }
 
@@ -133,6 +147,7 @@ public class ListOrderFragment extends Fragment {
             }
         });
     }
+
 
     private Emitter.Listener order = args -> getActivity().runOnUiThread(() -> {
         JSONObject data = (JSONObject) args[0];
@@ -148,19 +163,22 @@ public class ListOrderFragment extends Fragment {
             map.put("address",item.getAddress());
             map.put("status",item.getStatus());
             map.put("amount",item.getAmount());
-            list.add(map);
+            list.add(0, map);
         }
-        CustomAdapter customAdapter;
-        if (getActivity() != null) {
-            customAdapter = new CustomAdapter(getActivity(), R.layout.order_details, orders);
+
+        if (getActivity() != null){
+            customAdapter = new CustomAdapter(getActivity(), orders);
+            customAdapter.notifyDataSetChanged();
             listView.setAdapter(customAdapter);
+            listView.setLayoutManager(new LinearLayoutManager(getActivity()));
         }
-        listView.setOnItemClickListener((adapterView, view, i, l) -> {
-            Intent intent = new Intent(getActivity(), DetailsOrderActivity.class);
-            edit.putString("orderId", orders.get(i).getId());
-            edit.apply();
-            startActivity(intent);
-        });
+
+//        listView.setOnItemClickListener((adapterView, view, i, l) -> {
+//            Intent intent = new Intent(getActivity(), DetailsOrderActivity.class);
+//            edit.putString("orderId", orders.get(i).getId());
+//            edit.apply();
+//            startActivity(intent);
+//        });
     });
 
     @Override
@@ -169,7 +187,7 @@ public class ListOrderFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_list_order, container, false);
         // Inflate the layout for this fragment
         listView = view.findViewById(R.id.listView);
-        listView.setDivider(null);
+        listProcessBar = view.findViewById(R.id.listProcessBar);
         getOrder();
         return view;
     }

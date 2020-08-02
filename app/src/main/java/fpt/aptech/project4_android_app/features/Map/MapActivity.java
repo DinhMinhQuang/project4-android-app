@@ -1,7 +1,11 @@
 package fpt.aptech.project4_android_app.features.Map;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.Notification;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -15,8 +19,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.fragment.app.DialogFragment;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -56,6 +64,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static fpt.aptech.project4_android_app.Notification.CHANNEL_CANCEL;
+import static fpt.aptech.project4_android_app.Notification.COMPLETED_ORDER;
+import static fpt.aptech.project4_android_app.Notification.DELIVERY_ORDER;
+
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
     private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
     GoongMap mMap;
@@ -71,6 +83,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     MapClient mapClient = RetroMap.getRetrofitInstance().create(MapClient.class);
     static LatLng YOUR_LOCATION;
     static final LatLng DIACHINHA = new LatLng(10.7908028800001, 106.619042317);
+    private NotificationManagerCompat notificationManagerCompat;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,7 +96,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         btnCancel = findViewById(R.id.btnCancel);
         btnDelivery.setOnClickListener(view -> delivery());
         btnComplete.setOnClickListener(view -> complete());
-        btnCancel.setOnClickListener(view -> cancel());
+        btnCancel.setOnClickListener(view -> {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+            alertDialog.setMessage(R.string.cancel_order).setPositiveButton(R.string.accept_cancel_order, (dialogInterface, i) -> cancel())
+                        .setNegativeButton(R.string.keep_order, (dialogInterface, i) -> { return;});
+            alertDialog.create();
+            alertDialog.show();
+        });
+
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -95,6 +116,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             ActivityCompat.requestPermissions(MapActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
         }
     }
+
     private void cancel(){
         sp = this.getApplication().getSharedPreferences(PREFS, Context.MODE_PRIVATE);
         String jwt = sp.getString("jwt", null);
@@ -112,6 +134,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     //alert
                     Intent intent = new Intent(MapActivity.this, MainActivity.class);
                     startActivity(intent);
+                    notificationManagerCompat = NotificationManagerCompat.from(getApplication());
+                    Notification mBuilder = new NotificationCompat.Builder(getApplication(), CHANNEL_CANCEL)
+                            .setSmallIcon(R.drawable.fooddelivery)
+                            .setContentTitle("Bạn vừa hủy 1 đơn")
+                            .setContentText("Hủy quá 3 đơn sẽ bị khóa tài khoản")
+                            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                            .setCategory(NotificationCompat.CATEGORY_SOCIAL)
+                            .build();
+                    notificationManagerCompat.notify(1, mBuilder);
                 }
             }
 
@@ -140,6 +171,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     response.body();
                     btnDelivery.setVisibility(View.GONE);
                     btnComplete.setVisibility(View.VISIBLE);
+                    notificationManagerCompat = NotificationManagerCompat.from(getApplication());
+                    Notification mBuilder = new NotificationCompat.Builder(getApplication(), DELIVERY_ORDER)
+                            .setSmallIcon(R.drawable.fooddelivery)
+                            .setContentTitle("Bạn đã nhận món ăn tại cửa hàng")
+                            .setContentText("Cùng giao tới khách hàng nào....")
+                            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                            .setCategory(NotificationCompat.CATEGORY_SOCIAL)
+                            .build();
+                    notificationManagerCompat.notify(1, mBuilder);
                 }
             }
 
@@ -161,8 +201,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             public void onResponse(Call<Order> call, Response<Order> response) {
                 if (!response.isSuccessful()) return;
                 else {
+                    Order order = response.body();
+                    double yourFee = (order.getFee() * 80) / 100;
+
                     Intent intent = new Intent(MapActivity.this, MainActivity.class);
                     startActivity(intent);
+                    Notification mBuilder = new NotificationCompat.Builder(getApplication(), COMPLETED_ORDER)
+                            .setSmallIcon(R.drawable.fooddelivery)
+                            .setContentTitle("Bạn vừa hoàn thành 1 đơn")
+                            .setContentText("Số tiền được cộng thêm vào tài khoản là "+String.valueOf(yourFee).toString().split("\\.")[0]+"đ")
+                            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                            .setCategory(NotificationCompat.CATEGORY_SOCIAL)
+                            .build();
+                    notificationManagerCompat.notify(1, mBuilder);
                 }
             }
 

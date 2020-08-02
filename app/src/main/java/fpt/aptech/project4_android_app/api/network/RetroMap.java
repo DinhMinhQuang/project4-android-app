@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetroMap {
     private static Retrofit retrofit;
-    private static final String BASE_URL = "https://rsapi.goong.io/";
+    private static final String BASE_URL = "http://711c70445b85.ngrok.io";
 
     public static Retrofit getRetrofitInstance() {
         if (retrofit == null) {

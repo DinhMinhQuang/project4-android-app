@@ -3,18 +3,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".features.Order.ListOrderFragment">
+    tools:context=".features.Order.ListOrderFragment"
+    android:layout_gravity="center"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:clickable="true"
         tools:context=".MainActivity">
 
-        <ListView
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_gravity="center"
+            android:clickable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:background="?android:attr/selectableItemBackground"
             android:id="@+id/listView"
             android:layout_width="match_parent"
-            android:layout_height="447dp"
-            android:layout_weight="1" />
+            android:layout_height="match_parent" />
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/listProcessBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </FrameLayout>

@@ -1,7 +1,10 @@
 package fpt.aptech.project4_android_app.features.Order;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
+import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -33,6 +36,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static fpt.aptech.project4_android_app.Notification.ACCEPTED_ORDER;
+import static fpt.aptech.project4_android_app.Notification.CHANNEL_CANCEL;
+
 
 public class DetailsOrderActivity extends AppCompatActivity {
     public static final String PREFS = "PREFS";
@@ -43,6 +49,7 @@ public class DetailsOrderActivity extends AppCompatActivity {
     TextView tvStoreName, tvCountPrice, tvUserName, tvAddress, tvAmount, storeName, storeAddress;
     ListView listProduct;
     Button  btnAcceptOrder;
+    private NotificationManagerCompat notificationManagerCompat;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,6 +139,15 @@ public class DetailsOrderActivity extends AppCompatActivity {
                         edit.putString("address", response.body().getRestaurant().getAddress());
                         edit.apply();
                         startActivity(intent);
+                        notificationManagerCompat = NotificationManagerCompat.from(getApplication());
+                        Notification mBuilder = new NotificationCompat.Builder(getApplication(), ACCEPTED_ORDER)
+                                .setSmallIcon(R.drawable.fooddelivery)
+                                .setContentTitle("Bạn đã nhận thành công 1 đơn")
+                                .setContentText("Đi tới cửa hàng nào")
+                                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                                .setCategory(NotificationCompat.CATEGORY_SOCIAL)
+                                .build();
+                        notificationManagerCompat.notify(1, mBuilder);
                     }
                 }
 

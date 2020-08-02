@@ -1,5 +1,8 @@
 <resources>
-    <string name="app_name">project4-android-app</string>
+    <string name="app_name">Food Tap Delivery</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="cancel_order">Bạn có chắc muốn hủy đơn này</string>
+    <string name="accept_cancel_order">Hủy luôn</string>
+    <string name="keep_order">Không hủy</string>
 </resources>

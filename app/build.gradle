@@ -43,6 +43,8 @@ dependencies {
     implementation 'io.goong.goongsdk.geocoder:goong-android-geocoder:1.0'
     implementation 'org.apache.commons:commons-lang3:3.6'
     //noinspection GradleCompatible
+    implementation "com.android.support:support-compat:27.1.1"
+    //noinspection GradleCompatible
     implementation 'com.android.support:design:26.1.0'
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'

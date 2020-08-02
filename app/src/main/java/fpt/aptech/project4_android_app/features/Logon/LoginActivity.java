@@ -56,48 +56,45 @@ LoginActivity extends AppCompatActivity {
         phone = findViewById(R.id.phone);
         password = findViewById(R.id.password);
         btnLogin = findViewById(R.id.btnLogin);
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                HashMap<String, String> map = new HashMap<>();
-                map.put("phone", phone.getText().toString());
-                map.put("password", password.getText().toString());
-                Call<Shipper> call = shipperClient.login(map);
-                call.enqueue(new Callback<Shipper>() {
-                    @Override
-                    public void onResponse(Call<Shipper> call, Response<Shipper> response) {
-                        if(!response.isSuccessful()){
-                            return;
-                        }
-                        else {
-                            Log.d("Tag", response.code()+ "");
-                            JWT jwt = new JWT(response.body().getAccessToken());
-                            edit.putString("jwt", String.valueOf(jwt));
-                            edit.apply();
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            intent.putExtra("jwt", jwt);
-                            startActivity(intent);
-                            finish();
-                        }
+        btnLogin.setOnClickListener(view -> {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("phone", phone.getText().toString());
+            map.put("password", password.getText().toString());
+            Call<Shipper> call = shipperClient.login(map);
+            call.enqueue(new Callback<Shipper>() {
+                @Override
+                public void onResponse(Call<Shipper> call, Response<Shipper> response) {
+                    if(!response.isSuccessful()){
+                        return;
                     }
-
-                    @Override
-                    public void onFailure(Call<Shipper> call, Throwable t) {
-                        call.cancel();
-                        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                        builder.setTitle("Received Message");
-                        builder.setCancelable(true);
-                        builder.setTitle("Can not connect to backend");
-                        builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                            }
-                        });
-                        builder.show();
+                    else {
+                        Log.d("Tag", response.code()+ "");
+                        JWT jwt = new JWT(response.body().getAccessToken());
+                        edit.putString("jwt", String.valueOf(jwt));
+                        edit.apply();
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        intent.putExtra("jwt", jwt);
+                        startActivity(intent);
+                        finish();
                     }
-                });
-            }
+                }
+
+                @Override
+                public void onFailure(Call<Shipper> call, Throwable t) {
+                    call.cancel();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                    builder.setTitle("Received Message");
+                    builder.setCancelable(true);
+                    builder.setTitle("Can not connect to backend");
+                    builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+                    builder.show();
+                }
+            });
         });
     }
 

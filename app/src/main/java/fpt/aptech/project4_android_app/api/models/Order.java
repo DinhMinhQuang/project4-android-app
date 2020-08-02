@@ -23,6 +23,12 @@ public class Order implements Serializable {
     @SerializedName("restaurant")
     @Expose
     private Restaurant restaurant;
+    @SerializedName("fee")
+    @Expose
+    private Double fee;
+    @SerializedName("discount")
+    @Expose
+    private Double discount;
     @SerializedName("user")
     @Expose
     private User user;
@@ -41,6 +47,10 @@ public class Order implements Serializable {
     @SerializedName("__v")
     @Expose
     private Integer v;
+
+    @SerializedName("coupon")
+    @Expose
+    private Coupon coupon;
 
     public String getId() {
         return id;
@@ -80,6 +90,22 @@ public class Order implements Serializable {
 
     public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
+    }
+
+    public Double getFee() {
+        return fee;
+    }
+
+    public void setFee(Double fee) {
+        this.fee = fee;
+    }
+
+    public Double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Double discount) {
+        this.discount = discount;
     }
 
     public User getUser() {
@@ -128,5 +154,13 @@ public class Order implements Serializable {
 
     public void setV(Integer v) {
         this.v = v;
+    }
+
+    public Coupon getCoupon() {
+        return coupon;
+    }
+
+    public void setCoupon(Coupon coupon) {
+        this.coupon = coupon;
     }
 }
