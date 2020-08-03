@@ -1,13 +1,18 @@
 package fpt.aptech.project4_android_app.features.Order;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import android.Manifest;
 import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +22,11 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +42,7 @@ import fpt.aptech.project4_android_app.api.network.RetroClass;
 import fpt.aptech.project4_android_app.api.service.OrderClient;
 import fpt.aptech.project4_android_app.api.service.ShipperClient;
 import fpt.aptech.project4_android_app.features.Map.MapActivity;
+import io.goong.goongsdk.geometry.LatLng;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -49,6 +60,8 @@ public class DetailsOrderActivity extends AppCompatActivity {
     TextView tvStoreName, tvCountPrice, tvUserName, tvAddress, tvAmount, storeName, storeAddress;
     ListView listProduct;
     Button  btnAcceptOrder;
+    FusedLocationProviderClient client;
+    static LatLng YOUR_LOCATION;
     private NotificationManagerCompat notificationManagerCompat;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +69,13 @@ public class DetailsOrderActivity extends AppCompatActivity {
         setContentView(R.layout.activity_details_order);
         getSupportActionBar().setTitle("Chi tiết đơn hàng");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        client = LocationServices.getFusedLocationProviderClient(this);
+        if (ActivityCompat.checkSelfPermission(DetailsOrderActivity.this,
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            accecptOrder();
+        } else {
+            ActivityCompat.requestPermissions(DetailsOrderActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
+        }
         getDetailsOrder();
         accecptOrder();
     }
@@ -121,7 +141,22 @@ public class DetailsOrderActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == 44) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                accecptOrder();
+            }
+        }
+    }
+
     private void accecptOrder(){
+        Task<Location> task = client.getLastLocation();
+        task.addOnSuccessListener(location -> {
+            if (location != null) {
+                YOUR_LOCATION = new LatLng(location.getLatitude(), location.getLongitude());
+            }
+        });
         btnAcceptOrder = findViewById(R.id.btnAcceptOrder);
         sp = this.getApplication().getSharedPreferences(PREFS, Context.MODE_PRIVATE);
         edit = sp.edit();
@@ -129,7 +164,7 @@ public class DetailsOrderActivity extends AppCompatActivity {
         String access_token = "JWT "+jwt;
         String idOrder = sp.getString("orderId", null);
         btnAcceptOrder.setOnClickListener(view -> {
-            Call<Order> call = shipperClient.acceptOrder(access_token, idOrder);
+            Call<Order> call = shipperClient.acceptOrder(access_token, idOrder, YOUR_LOCATION);
             call.enqueue(new Callback<Order>() {
                 @Override
                 public void onResponse(Call<Order> call, Response<Order> response) {

@@ -46,7 +46,7 @@ public class ListAdapter extends ArrayAdapter<Order> {
             TextView tvAmount = v.findViewById(R.id.tvAmount);
             tvAmount.setText(String.valueOf(order.getAmount()));
             ImageView imageStore = v.findViewById(R.id.imageStore);
-            Picasso.get().load("http://711c70445b85.ngrok.io/public/image/"+order.getRestaurant().getAvatar()).into(imageStore);
+            Picasso.get().load("http://2b4aac76ab11.ngrok.io/public/image/"+order.getRestaurant().getAvatar()).into(imageStore);
         }
         return v;
     }

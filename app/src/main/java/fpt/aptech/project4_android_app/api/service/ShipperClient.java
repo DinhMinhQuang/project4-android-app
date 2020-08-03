@@ -5,6 +5,7 @@ import java.util.List;
 
 import fpt.aptech.project4_android_app.api.models.Order;
 import fpt.aptech.project4_android_app.api.models.Shipper;
+import io.goong.goongsdk.geometry.LatLng;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -32,7 +33,7 @@ public interface ShipperClient {
     Call<Shipper> register(@Body Shipper shipper);
 
     @POST("/shipper/acceptOrder/{id}")
-    Call<Order> acceptOrder(@Header("Authorization") String access_token, @Path("id") String idOrder);
+    Call<Order> acceptOrder(@Header("Authorization") String access_token, @Path("id") String idOrder, @Body LatLng latLng);
 
     @POST("/shipper/deliveringOrder/{id}")
     Call<Order> deliveringOrder(@Header("Authorization") String access_token, @Path("id") String idOrder);
