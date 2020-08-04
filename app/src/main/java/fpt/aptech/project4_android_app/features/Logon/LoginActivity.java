@@ -14,8 +14,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.auth0.android.jwt.Claim;
 import com.auth0.android.jwt.JWT;
+import com.github.nkzawa.socketio.client.IO;
+import com.github.nkzawa.socketio.client.Socket;
 
+import java.net.URISyntaxException;
 import java.util.HashMap;
 
 import fpt.aptech.project4_android_app.MainActivity;
@@ -39,6 +43,7 @@ LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mSocket.connect();
         setContentView(R.layout.activity_login);
         getSupportActionBar().setTitle("Foot Tap Delivery");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -49,6 +54,11 @@ LoginActivity extends AppCompatActivity {
         Intent myIntent = new Intent(getApplicationContext(), NewShipperActivity.class);
         startActivityForResult(myIntent, 0);
         return true;
+    }
+    private Socket mSocket;{
+        try {
+            mSocket = IO.socket("http://2113a384170a.ngrok.io");
+        } catch (URISyntaxException e) {}
     }
     private void login(){
         sp = getApplicationContext().getSharedPreferences(PREFS, MODE_PRIVATE);
@@ -70,6 +80,9 @@ LoginActivity extends AppCompatActivity {
                     else {
                         Log.d("Tag", response.code()+ "");
                         JWT jwt = new JWT(response.body().getAccessToken());
+                        Claim subscriptionMetaData = jwt.getClaim("_id");
+                        String shipperId = subscriptionMetaData.asString();
+                        mSocket.emit("join", shipperId);
                         edit.putString("jwt", String.valueOf(jwt));
                         edit.apply();
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);

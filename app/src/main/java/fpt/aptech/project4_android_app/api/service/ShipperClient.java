@@ -43,4 +43,7 @@ public interface ShipperClient {
 
     @POST("/shipper/cancelOrder/{id}")
     Call<Order> cancelOrder(@Header("Authorization") String access_token, @Path("id") String idOrder);
+
+    @POST("shipper/sendMyLocation")
+    Call<String> sendMyLocation(@Header("Authorization") String acces_token, @Body LatLng latLng);
 }

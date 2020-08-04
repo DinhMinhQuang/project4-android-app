@@ -1,5 +1,6 @@
 package fpt.aptech.project4_android_app.api.models;
 
+import com.github.nkzawa.emitter.Emitter;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -7,7 +8,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-public class Order implements Serializable {
+public class Order {
     @SerializedName("_id")
     @Expose
     private String id;
@@ -52,6 +53,9 @@ public class Order implements Serializable {
     @Expose
     private Coupon coupon;
 
+    @SerializedName("canceledBy")
+    @Expose
+    private String canceledBy;
     public String getId() {
         return id;
     }
@@ -162,5 +166,13 @@ public class Order implements Serializable {
 
     public void setCoupon(Coupon coupon) {
         this.coupon = coupon;
+    }
+
+    public String getCanceledBy() {
+        return canceledBy;
+    }
+
+    public void setCanceledBy(String canceledBy) {
+        this.canceledBy = canceledBy;
     }
 }

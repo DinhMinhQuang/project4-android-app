@@ -88,9 +88,10 @@ public class ListOrderFragment extends Fragment {
     }
     private Socket mSocket;{
         try {
-            mSocket = IO.socket("http://2b4aac76ab11.ngrok.io");
+            mSocket = IO.socket("http://2113a384170a.ngrok.io");
         } catch (URISyntaxException e) {}
     }
+
     RecyclerView listView;
     ProgressBar listProcessBar;
     @Override
@@ -147,7 +148,6 @@ public class ListOrderFragment extends Fragment {
             }
         });
     }
-
 
     private Emitter.Listener order = args -> getActivity().runOnUiThread(() -> {
         JSONObject data = (JSONObject) args[0];

@@ -42,6 +42,10 @@ public class Shipper {
     @Expose
     private String accessToken;
 
+    @SerializedName("currentOrder")
+    @Expose
+    private String currentOrder;
+
     public String get_id() {
         return _id;
     }
@@ -128,5 +132,13 @@ public class Shipper {
 
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
+    }
+
+    public String getCurrentOrder() {
+        return currentOrder;
+    }
+
+    public void setCurrentOrder(String currentOrder) {
+        this.currentOrder = currentOrder;
     }
 }
