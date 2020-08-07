@@ -8,234 +8,251 @@
     android:layout_marginTop="-40dp"
     android:layout_gravity="center">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/profile_layout"
-        android:layout_gravity="center"
-        android:layout_margin="5dp"
-        android:background="#fff"
-        android:elevation="4dp"
-
-        android:orientation="vertical"
-        android:padding="5dp">
+        android:layout_height="wrap_content">
 
         <LinearLayout
+            android:id="@+id/wrap"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/profile_layout"
             android:layout_gravity="center"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="5dp"
-            android:background="#fff"
-            android:elevation="4dp"
-
-            android:paddingLeft="5dp"
-            android:paddingTop="20dp"
-            android:paddingRight="5dp"
-            android:paddingBottom="20dp">
-
-            <TextView
-                android:layout_width="351dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="8dp"
-                android:clickable="true"
-                android:text="Thống kê của bạn"
-                android:textAlignment="center"
-                android:textColor="#DA484A"
-                android:textColorHighlight="#DA484A"
-                android:textColorLink="#FFFFFF"
-                android:textSize="30sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/redirectStar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/profile_layout"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="5dp"
+            android:layout_margin="5dp"
             android:background="#fff"
 
             android:elevation="4dp"
-            android:paddingLeft="5dp"
-            android:paddingTop="20dp"
-            android:paddingRight="5dp"
-            android:paddingBottom="20dp">
+            android:orientation="vertical"
+            android:padding="5dp"
+            android:visibility="gone">
 
-            <TextView
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="8dp"
-                android:clickable="true"
-                android:text="Đánh giá"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvStar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/profile_layout"
+                android:layout_gravity="center"
+                android:layout_marginStart="5dp"
                 android:layout_marginTop="5dp"
-                android:layout_weight="1"
-                android:text="TextView"
-                android:textSize="24sp" />
+                android:layout_marginEnd="5dp"
+                android:background="#fff"
+                android:elevation="4dp"
+
+                android:paddingLeft="5dp"
+                android:paddingTop="20dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="20dp">
+
+                <TextView
+                    android:layout_width="351dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="8dp"
+                    android:clickable="true"
+                    android:text="Thống kê của bạn"
+                    android:textAlignment="center"
+                    android:textColor="#DA484A"
+                    android:textColorHighlight="#DA484A"
+                    android:textColorLink="#FFFFFF"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/redirectStar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/profile_layout"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:background="#fff"
+
+                android:elevation="4dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="20dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="20dp">
+
+                <TextView
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="8dp"
+                    android:clickable="true"
+                    android:text="Đánh giá"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvStar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:text="Chưa có đánh giá"
+                    android:textSize="24sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/redirectAcceptOrder"
+                android:layout_width="362dp"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/profile_layout"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:background="#fff"
+                android:clickable="true"
+
+                android:elevation="4dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="20dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="20dp">
+
+                <TextView
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="8dp"
+                    android:clickable="true"
+                    android:text="Số đơn nhận"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvAcceptOrder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:text="TextView"
+                    android:textSize="24sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/redirectFailOrder"
+                android:layout_width="362dp"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/profile_layout"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:background="#fff"
+                android:clickable="true"
+
+                android:elevation="4dp"
+                android:paddingLeft="5dp"
+                android:paddingTop="20dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="20dp">
+
+                <TextView
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="8dp"
+                    android:clickable="true"
+                    android:text="Số đơn hủy"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvFailOrder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:text="TextView"
+                    android:textSize="24sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="362dp"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/profile_layout"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:background="#fff"
+                android:clickable="true"
+                android:elevation="4dp"
+
+                android:paddingLeft="5dp"
+                android:paddingTop="20dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="20dp">
+
+                <TextView
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="8dp"
+                    android:clickable="true"
+                    android:text="Tiền hiện có"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvAmount"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:text="TextView"
+                    android:textSize="24sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="362dp"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/profile_layout"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="5dp"
+                android:background="#fff"
+                android:elevation="4dp"
+
+                android:paddingLeft="5dp"
+                android:paddingTop="20dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="20dp">
+
+                <TextView
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="5dp"
+                    android:clickable="true"
+                    android:text="Đã đi được"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvRoad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:text="Đang tải..."
+                    android:textSize="24sp" />
+            </LinearLayout>
+
+
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/redirectAcceptOrder"
-            android:layout_width="362dp"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/profile_layout"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="5dp"
-            android:background="#fff"
-
-            android:elevation="4dp"
-            android:paddingLeft="5dp"
-            android:paddingTop="20dp"
-            android:paddingRight="5dp"
-            android:paddingBottom="20dp">
-
-            <TextView
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="8dp"
-                android:clickable="true"
-                android:text="Số đơn nhận"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvAcceptOrder"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_weight="1"
-                android:text="TextView"
-                android:textSize="24sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/redirectFailOrder"
-            android:layout_width="362dp"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/profile_layout"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="5dp"
-            android:background="#fff"
-
-            android:elevation="4dp"
-            android:paddingLeft="5dp"
-            android:paddingTop="20dp"
-            android:paddingRight="5dp"
-            android:paddingBottom="20dp">
-
-            <TextView
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="8dp"
-                android:clickable="true"
-                android:text="Số đơn hủy"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvFailOrder"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_weight="1"
-                android:text="TextView"
-                android:textSize="24sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="362dp"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/profile_layout"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="5dp"
-            android:background="#fff"
-            android:elevation="4dp"
-
-            android:paddingLeft="5dp"
-            android:paddingTop="20dp"
-            android:paddingRight="5dp"
-            android:paddingBottom="20dp">
-
-            <TextView
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="8dp"
-                android:clickable="true"
-                android:text="Tiền hiện có"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvAmount"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_weight="1"
-                android:text="TextView"
-                android:textSize="24sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="362dp"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/profile_layout"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="5dp"
-            android:background="#fff"
-            android:elevation="4dp"
-
-            android:paddingLeft="5dp"
-            android:paddingTop="20dp"
-            android:paddingRight="5dp"
-            android:paddingBottom="20dp">
-
-            <TextView
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="5dp"
-                android:clickable="true"
-                android:text="Đã đi được"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvRoad"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_weight="1"
-                android:text="TextView"
-                android:textSize="24sp" />
-        </LinearLayout>
-
-
-    </LinearLayout>
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+    </FrameLayout>
 </ScrollView>

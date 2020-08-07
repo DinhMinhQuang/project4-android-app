@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
+import java.util.Map;
 
 public class User {
     @SerializedName("restaurants")
@@ -63,6 +64,11 @@ public class User {
     @SerializedName("cart")
     @Expose
     private List<Object> cart;
+    @SerializedName("notifications")
+    @Expose
+    private List<Map<String, ?>> notifications;
+    @SerializedName("")
+
 
     public List<String> getRestaurants() {
         return restaurants;
@@ -214,5 +220,13 @@ public class User {
 
     public void setCart(List<Object> cart) {
         this.cart = cart;
+    }
+
+    public List<Map<String, ?>> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(List<Map<String, ?>> notifications) {
+        this.notifications = notifications;
     }
 }

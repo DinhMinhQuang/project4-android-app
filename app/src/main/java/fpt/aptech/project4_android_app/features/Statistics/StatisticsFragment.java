@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,7 +57,8 @@ public class StatisticsFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-    LinearLayout redirectAcceptOrder, redirectFailOrder;
+    ProgressBar progressBar;
+    LinearLayout redirectAcceptOrder, redirectFailOrder, wrap;
     TextView tvAcceptOrder, tvFailOrder, tvAmount;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -96,6 +98,8 @@ public class StatisticsFragment extends Fragment {
                     tvFailOrder.setText(String.valueOf(countFailed));
                     tvAcceptOrder.setText(String.valueOf(countComplete));
                     tvAmount.setText(String.valueOf(realAmount).toString().split("\\.")[0]+"đ");
+                    progressBar.setVisibility(View.GONE);
+                    wrap.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -110,6 +114,8 @@ public class StatisticsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_statistics, container, false);
+        wrap = view.findViewById(R.id.wrap);
+        progressBar = view.findViewById(R.id.progressBar);
         redirectAcceptOrder = view.findViewById(R.id.redirectAcceptOrder);
         redirectFailOrder = view.findViewById(R.id.redirectFailOrder);
         tvAcceptOrder = view.findViewById(R.id.tvAcceptOrder);

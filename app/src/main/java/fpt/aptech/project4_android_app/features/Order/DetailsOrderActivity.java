@@ -7,6 +7,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
@@ -48,7 +49,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static fpt.aptech.project4_android_app.Notification.ACCEPTED_ORDER;
+import static fpt.aptech.project4_android_app.Notification.BACK_TO_YOUR_ORDER;
 import static fpt.aptech.project4_android_app.Notification.CHANNEL_CANCEL;
+import static fpt.aptech.project4_android_app.Notification.CHANNEL_CANCEL_BY_USER;
 
 
 public class DetailsOrderActivity extends AppCompatActivity {
@@ -168,7 +171,36 @@ public class DetailsOrderActivity extends AppCompatActivity {
             call.enqueue(new Callback<Order>() {
                 @Override
                 public void onResponse(Call<Order> call, Response<Order> response) {
-                    if (!response.isSuccessful()) return;
+                    if (response.body().getMessage() != null) {
+                        if (response.body().getMessage().equalsIgnoreCase("2")) {
+                            Intent back = new Intent(getApplication(), MapActivity.class);
+                            startActivity(back);
+                            notificationManagerCompat = NotificationManagerCompat.from(getApplication());
+                            Notification mBuilder = new NotificationCompat.Builder(getApplication(), BACK_TO_YOUR_ORDER)
+                                    .setSmallIcon(R.drawable.fooddelivery)
+                                    .setContentTitle("Vui lòng hoàn thành đơn hiện tại")
+                                    .setContentText("Đừng tham lam")
+                                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                                    .setCategory(NotificationCompat.CATEGORY_SOCIAL)
+                                    .build();
+                            notificationManagerCompat.notify(1, mBuilder);
+                            return;
+                        }
+                        else {
+                            Intent back = new Intent(getApplication(), MainActivity.class);
+                            startActivity(back);
+                            notificationManagerCompat = NotificationManagerCompat.from(getApplication());
+                            Notification mBuilder = new NotificationCompat.Builder(getApplication(), CHANNEL_CANCEL_BY_USER)
+                                    .setSmallIcon(R.drawable.fooddelivery)
+                                    .setContentTitle("Thông báo")
+                                    .setContentText("Đơn hàng đã có người khác chấp nhận")
+                                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                                    .setCategory(NotificationCompat.CATEGORY_SOCIAL)
+                                    .build();
+                            notificationManagerCompat.notify(1, mBuilder);
+                            return;
+                        }
+                    }
                     else {
                         Intent intent = new Intent(DetailsOrderActivity.this, MapActivity.class);
                         edit.putString("address", response.body().getRestaurant().getAddress());
@@ -184,6 +216,7 @@ public class DetailsOrderActivity extends AppCompatActivity {
                                 .build();
                         notificationManagerCompat.notify(1, mBuilder);
                     }
+
                 }
 
                 @Override

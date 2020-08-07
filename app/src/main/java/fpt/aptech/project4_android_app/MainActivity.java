@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Goong.getInstance(this, "4p35EI5AKS2sqmjuJIN5du5rcv4n8o8wXel5JDGD");
         setContentView(R.layout.activity_main);
-        getSupportActionBar().setTitle("Foot Tap Delivery");
+        getSupportActionBar().setTitle("Food Tap Delivery");
         ListOrderFragment listOrderFragment = new ListOrderFragment();
         JWT jwt = (JWT) getIntent().getParcelableExtra("jwt");
         Bundle bundle = new Bundle();

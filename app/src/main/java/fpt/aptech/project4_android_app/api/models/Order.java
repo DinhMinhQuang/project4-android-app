@@ -8,6 +8,8 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
+import io.goong.goongsdk.geometry.LatLng;
+
 public class Order {
     @SerializedName("_id")
     @Expose
@@ -56,6 +58,9 @@ public class Order {
     @SerializedName("canceledBy")
     @Expose
     private String canceledBy;
+    @SerializedName("message")
+    @Expose
+    private String message;
     public String getId() {
         return id;
     }
@@ -174,5 +179,13 @@ public class Order {
 
     public void setCanceledBy(String canceledBy) {
         this.canceledBy = canceledBy;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

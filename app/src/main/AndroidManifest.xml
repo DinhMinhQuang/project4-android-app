@@ -19,24 +19,24 @@
         android:targetSandboxVersion="1"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="${cleartextTrafficPermitted}">
-        <activity android:name=".features.Statistics.FailedOrderActivity"></activity>
+        <activity android:name=".features.Statistics.StatisticDetailOrdersActivity"></activity>
+        <activity android:name=".features.Statistics.FailedOrderActivity" />
         <activity android:name=".features.Statistics.CompletedOrderActivity" />
         <activity android:name=".features.Map.MapActivity" />
         <activity android:name=".features.Order.DetailsOrderActivity" />
-        <activity android:name=".SplashActivity" >
+        <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".features.Logon.RegisterActivity" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".NewShipperActivity">
-        </activity>
+        <activity android:name=".NewShipperActivity"></activity>
         <activity
             android:name=".features.Logon.LoginActivity"
             android:windowSoftInputMode="adjustResize" />
-
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package fpt.aptech.project4_android_app.features.Order;
+package fpt.aptech.project4_android_app.features.Statistics;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,19 +10,17 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 import java.util.Map;
 
 import fpt.aptech.project4_android_app.R;
 
-public class CustomList extends SimpleAdapter {
+public class ProductList extends SimpleAdapter {
 
     private Context mContext;
     public LayoutInflater inflater=null;
 
-    public CustomList(Context context, List<? extends Map<String, ?>> data, int resource, String[] from, int[] to) {
+    public ProductList(Context context, List<? extends Map<String, ?>> data, int resource, String[] from, int[] to) {
         super(context, data, resource, from, to);
         mContext = context;
         inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

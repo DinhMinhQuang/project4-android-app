@@ -57,7 +57,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         holder.tvFee.setText(order.getFee().toString() +"đ");
         holder.tvPrice.setText(order.getAmount().toString() +"đ");
         holder.tvUserPhone.setText(order.getUser().getPhone());
-        Picasso.get().load("http://711c70445b85.ngrok.io/public/image/" + order.getRestaurant().getAvatar()).into(holder.tvImageStore);
+        Picasso.get().load("http://3cf5de473679.ngrok.io/public/image/" + order.getRestaurant().getAvatar()).into(holder.tvImageStore);
     }
 
     @Override

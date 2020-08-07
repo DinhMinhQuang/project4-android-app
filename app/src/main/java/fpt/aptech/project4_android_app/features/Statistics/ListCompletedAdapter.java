@@ -18,13 +18,13 @@ import java.util.List;
 import fpt.aptech.project4_android_app.R;
 import fpt.aptech.project4_android_app.api.models.Order;
 
-public class ListAdapter extends ArrayAdapter<Order> {
+public class ListCompletedAdapter extends ArrayAdapter<Order> {
 
-    public ListAdapter(@NonNull Context context, int resource) {
+    public ListCompletedAdapter(@NonNull Context context, int resource) {
         super(context, resource);
     }
 
-    public ListAdapter(@NonNull Context context, int resource, List<Order> orders) {
+    public ListCompletedAdapter(@NonNull Context context, int resource, List<Order> orders) {
         super(context, resource, orders);
     }
 
@@ -35,18 +35,20 @@ public class ListAdapter extends ArrayAdapter<Order> {
         if(v == null) {
             LayoutInflater vi;
             vi = LayoutInflater.from(getContext());
-            v = vi.inflate(R.layout.details_completed_order, null);
+            v = vi.inflate(R.layout.details_completed_orders, null);
         }
         Order order = getItem(position);
         if (order != null) {
-            TextView tvRestaurant = v.findViewById(R.id.tvRestaurant);
+            TextView tvAddress = v.findViewById(R.id.tvAddress);
+            tvAddress.setText(order.getAddress());
+            TextView tvRestaurant = v.findViewById(R.id.tvStoreName);
             tvRestaurant.setText(order.getRestaurant().getName());
             TextView tvUserPhone = v.findViewById(R.id.tvUserPhone);
             tvUserPhone.setText(order.getUser().getPhone());
-            TextView tvAmount = v.findViewById(R.id.tvAmount);
-            tvAmount.setText(String.valueOf(order.getAmount()));
-            ImageView imageStore = v.findViewById(R.id.imageStore);
-            Picasso.get().load("http://2113a384170a.ngrok.io/public/image/"+order.getRestaurant().getAvatar()).into(imageStore);
+            TextView tvAmount = v.findViewById(R.id.tvPrice);
+            tvAmount.setText(String.valueOf(order.getAmount()).split("\\.")[0] + "đ");
+            ImageView imageStore = v.findViewById(R.id.tvImageStore);
+            Picasso.get().load("http://3cf5de473679.ngrok.io/public/image/"+order.getRestaurant().getAvatar()).into(imageStore);
         }
         return v;
     }

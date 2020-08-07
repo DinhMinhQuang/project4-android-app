@@ -94,11 +94,11 @@ public class ShipperProfileFragment extends Fragment {
                 else {
                     Shipper shipper = response.body();
                     tvFullName.setText(shipper.getFullname());
-                    tvDob.setText(String.valueOf(shipper.getDob()));
+                    tvDob.setText(shipper.getDob() == null ? "Chưa cung cấp" : String.valueOf(shipper.getDob()));
                     tvGender.setText(shipper.getGender() ? "Nam" : "Nữ");
                     tvAmount.setText(shipper.getIdCard());
                     tvPhoneNumber.setText(shipper.getPhone());
-                    Picasso.get().load("http://2113a384170a.ngrok.io/public/image/"+shipper.getAvatar()).into(profile);
+                    Picasso.get().load("http://3cf5de473679.ngrok.io/public/image/"+shipper.getAvatar()).into(profile);
                 }
             }
 

@@ -16,9 +16,9 @@ public class NewShipperActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_user);
         getSupportActionBar().setLogo(R.drawable.logo);
-        getSupportActionBar().setTitle("Foot Tap Delivery");
-        btnSignIn =(Button) findViewById(R.id.btnSignIn);
-        btnRegister = (Button) findViewById(R.id.btnRegister);
+        getSupportActionBar().setTitle("Food Tap Delivery");
+        btnSignIn = findViewById(R.id.btnSignIn);
+        btnRegister = findViewById(R.id.btnRegister);
         btnSignIn.setOnClickListener(view -> {
             Intent intent = new Intent(NewShipperActivity.this, LoginActivity.class);
             startActivity(intent);

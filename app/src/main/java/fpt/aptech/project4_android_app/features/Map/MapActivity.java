@@ -25,6 +25,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
@@ -34,23 +35,31 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.maps.android.PolyUtil;
 import com.goong.geocoder.places.data.remote.entity.AutoCompleteResponse;
+import com.goong.geocoder.places.data.remote.entity.ChildPlace;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import fpt.aptech.project4_android_app.MainActivity;
 import fpt.aptech.project4_android_app.api.models.Order;
 import fpt.aptech.project4_android_app.api.models.Shipper;
 import fpt.aptech.project4_android_app.api.network.RetroClass;
 import fpt.aptech.project4_android_app.api.service.ShipperClient;
+import fpt.aptech.project4_android_app.features.Order.CustomAdapter;
 import io.goong.goongsdk.annotations.Polygon;
 import io.goong.goongsdk.annotations.PolygonOptions;
 import io.goong.goongsdk.location.Utils;
 import io.goong.goongsdk.utils.*;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
@@ -92,12 +101,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     SupportMapFragment mapFragment;
     MapClient mapClient = RetroMap.getRetrofitInstance().create(MapClient.class);
     static LatLng YOUR_LOCATION;
-    static final LatLng DIACHINHA = new LatLng(10.7908028800001, 106.619042317);
+    List<ChildPlace> childPlaces;
     private NotificationManagerCompat notificationManagerCompat;
     ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
-    private Socket mSocket;{
+    private Socket mSocket;
+
+    {
         try {
-            mSocket = IO.socket("http://2113a384170a.ngrok.io");
+            mSocket = IO.socket("http://3cf5de473679.ngrok.io");
         } catch (URISyntaxException e) {}
     }
     @Override
@@ -108,7 +119,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         btnComplete = findViewById(R.id.btnComplete);
         btnDelivery = findViewById(R.id.btnDelivery);
         mSocket.connect();
-        mSocket.on("cancelOrder", (Emitter.Listener) args -> {
+        mSocket.on("cancelOrder", args -> {
             Intent intent = new Intent(getApplication(), MainActivity.class);
             startActivity(intent);
             notificationManagerCompat = NotificationManagerCompat.from(getApplication());
@@ -145,7 +156,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             ActivityCompat.requestPermissions(MapActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
         }
     }
-
 
     private void cancel(){
         sp = this.getApplication().getSharedPreferences(PREFS, Context.MODE_PRIVATE);
@@ -273,56 +283,47 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
-
-
     private void getCurrentLocation() {
         GoongMap goongMap;
         sp = this.getApplication().getSharedPreferences(PREFS, Context.MODE_PRIVATE);
         String jwt = sp.getString("jwt", null);
         String access_token = "JWT "+jwt;
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                Task<Location> task = client.getLastLocation();
-                task.addOnSuccessListener(new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        if (location != null) {
-                            mapFragment.getMapAsync(new OnMapReadyCallback() {
-                                @Override
-                                public void onMapReady(@NonNull GoongMap mapboxMap) {
-                                    YOUR_LOCATION = new LatLng(location.getLatitude(), location.getLongitude());
-                                    MarkerOptions markerOptions = new MarkerOptions().position(YOUR_LOCATION).title("Bạn ở đây");
-                                    mapboxMap.animateCamera(CameraUpdateFactory.newLatLngZoom(YOUR_LOCATION, 30));
-                                    mapboxMap.addMarker(markerOptions);
-                                    List<LatLng> points = new ArrayList<>();
-                                    points.add(YOUR_LOCATION);
-                                    mapboxMap.addPolyline(new PolylineOptions()
-                                            .addAll(points)
-                                            .color(Color.parseColor("#3bb2d0"))
-                                            .alpha((float) 0.5)
-                                            .width(2));
-                                    Call<String> call = shipperClient.sendMyLocation(access_token, YOUR_LOCATION);
-                                    call.enqueue(new Callback<String>() {
-                                        @Override
-                                        public void onResponse(Call<String> call, Response<String> response) {
-                                            if (!response.isSuccessful()) return;
-                                            else {
+        Runnable runnable = () -> {
+            Task<Location> task = client.getLastLocation();
+            task.addOnSuccessListener(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    if (location != null) {
+                        mapFragment.getMapAsync(new OnMapReadyCallback() {
+                            @Override
+                            public void onMapReady(@NonNull GoongMap mapboxMap) {
+                                YOUR_LOCATION = new LatLng(location.getLatitude(), location.getLongitude());
+                                MarkerOptions markerOptions = new MarkerOptions().position(YOUR_LOCATION).title("Bạn ở đây");
+                                mapboxMap.animateCamera(CameraUpdateFactory.newLatLngZoom(YOUR_LOCATION, 15));
+                                mapboxMap.addMarker(markerOptions);
+                                List<LatLng> points = new ArrayList<>();
+                                points.add(YOUR_LOCATION);
+                                mapboxMap.addPolyline(new PolylineOptions()
+                                        .addAll(points)
+                                        .color(Color.parseColor("#3bb2d0"))
+                                        .alpha((float) 0.5)
+                                        .width(2));
+                                Call<String> call = shipperClient.sendMyLocation(access_token, YOUR_LOCATION);
+                                call.enqueue(new Callback<String>() {
+                                    @Override
+                                    public void onResponse(Call<String> call, Response<String> response) {
+                                        if (!response.isSuccessful()) return;
+                                    }
 
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<String> call, Throwable t) {
-                                            Toast.makeText(MapActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                }
-                            });
-                        }
+                                    @Override
+                                    public void onFailure(Call<String> call, Throwable t) {
+                                    }
+                                });
+                            }
+                        });
                     }
-                });
-            }
+                }
+            });
         };
         service.scheduleAtFixedRate(runnable, 0, 10, TimeUnit.SECONDS);
     }

@@ -13,6 +13,7 @@ public class Notification extends Application {
     public static final String DELIVERY_ORDER = "delivery";
     public static final String COMPLETED_ORDER = "delivery";
     public static final String CHANNEL_CANCEL_BY_USER = "cancel_byUser";
+    public static final String BACK_TO_YOUR_ORDER = "backToYourOrder";
 
     @Override
     public void onCreate() {
@@ -46,17 +47,24 @@ public class Notification extends Application {
                     "Cancel By User",
                     NotificationManager.IMPORTANCE_HIGH
             );
+            NotificationChannel BackToYourOrder = new NotificationChannel(
+                    BACK_TO_YOUR_ORDER,
+                    "Back Yo Your Order",
+                    NotificationManager.IMPORTANCE_HIGH
+            );
             AcceptChanel.setDescription("Food Tap Delivery");
             CompleteChanel.setDescription("Food Tap Delivery");
             DeliveryChanel.setDescription("Food Tap Delivery");
             CancelChanel.setDescription("Food Tap Delivery");
             CancelByUser.setDescription("Food Tap Delivery");
+            BackToYourOrder.setDescription("Food Tap Delivery");
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(AcceptChanel);
             manager.createNotificationChannel(CompleteChanel);
             manager.createNotificationChannel(DeliveryChanel);
             manager.createNotificationChannel(CancelChanel);
             manager.createNotificationChannel(CancelByUser);
+            manager.createNotificationChannel(BackToYourOrder);
         }
     }
 

@@ -3,27 +3,23 @@ package fpt.aptech.project4_android_app.features.Statistics;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.widget.ImageView;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import fpt.aptech.project4_android_app.MainActivity;
 import fpt.aptech.project4_android_app.R;
 import fpt.aptech.project4_android_app.api.models.Order;
 import fpt.aptech.project4_android_app.api.network.RetroClass;
-import fpt.aptech.project4_android_app.api.service.OrderClient;
 import fpt.aptech.project4_android_app.api.service.ShipperClient;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,14 +32,26 @@ public class CompletedOrderActivity extends AppCompatActivity {
     SharedPreferences.Editor edit;
     ListView listViewCompleted;
     TextView tvRestaurant, tvUserPhone, tvAmount;
+    ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_completed_order);
+        getSupportActionBar().setTitle("Danh sách đơn hoàn thành");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getCompletedOrders();
     }
 
+    public boolean onOptionsItemSelected(MenuItem item){
+        Intent myIntent = new Intent(getApplicationContext(), StatisticsFragment.class);
+        startActivityForResult(myIntent, 0);
+        return true;
+    }
+
     private void getCompletedOrders() {
+        sp = this.getApplication().getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        edit = sp.edit();
+        progressBar = findViewById(R.id.progressBar);
         listViewCompleted = findViewById(R.id.listViewCompleted);
         sp = this.getApplication().getSharedPreferences(PREFS, Context.MODE_PRIVATE);
         String jwt = sp.getString("jwt", null);
@@ -55,11 +63,17 @@ public class CompletedOrderActivity extends AppCompatActivity {
                 if (!response.isSuccessful()) return;
                 else {
                     List<Order> orders = response.body();
-                    ListAdapter listAdapter;
+                    ListCompletedAdapter listAdapter;
                     if (getApplication() != null) {
-                        listAdapter = new ListAdapter(getApplicationContext(), R.layout.details_completed_order, orders);
+                        listAdapter = new ListCompletedAdapter(getApplicationContext(), R.layout.details_completed_orders, orders);
                         listViewCompleted.setAdapter(listAdapter);
+                        progressBar.setVisibility(View.GONE);
                     }
+                    listViewCompleted.setOnItemClickListener((adapterView, view, i, l) -> {
+                        Intent intent = new Intent(getBaseContext(), StatisticDetailOrdersActivity.class);
+                        edit.putString("idOrder", response.body().get(i).getId());
+                        startActivity(intent);
+                    });
                 }
             }
 

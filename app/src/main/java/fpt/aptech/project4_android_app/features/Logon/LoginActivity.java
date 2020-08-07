@@ -45,10 +45,11 @@ LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mSocket.connect();
         setContentView(R.layout.activity_login);
-        getSupportActionBar().setTitle("Foot Tap Delivery");
+        getSupportActionBar().setTitle("Food Tap Delivery");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         login();
     }
+
 
     public boolean onOptionsItemSelected(MenuItem item){
         Intent myIntent = new Intent(getApplicationContext(), NewShipperActivity.class);
@@ -57,7 +58,7 @@ LoginActivity extends AppCompatActivity {
     }
     private Socket mSocket;{
         try {
-            mSocket = IO.socket("http://2113a384170a.ngrok.io");
+            mSocket = IO.socket("http://3cf5de473679.ngrok.io");
         } catch (URISyntaxException e) {}
     }
     private void login(){
