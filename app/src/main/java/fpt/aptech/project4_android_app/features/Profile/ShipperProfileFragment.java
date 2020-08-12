@@ -98,7 +98,7 @@ public class ShipperProfileFragment extends Fragment {
                     tvGender.setText(shipper.getGender() ? "Nam" : "Nữ");
                     tvAmount.setText(shipper.getIdCard());
                     tvPhoneNumber.setText(shipper.getPhone());
-                    Picasso.get().load("http://3cf5de473679.ngrok.io/public/image/"+shipper.getAvatar()).into(profile);
+                    Picasso.get().load("http://0b78bf0553f2.ngrok.io/public/image/"+shipper.getAvatar()).into(profile);
                 }
             }
 

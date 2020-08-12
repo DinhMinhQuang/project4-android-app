@@ -88,7 +88,7 @@ public class ListOrderFragment extends Fragment {
     }
     private Socket mSocket;{
         try {
-            mSocket = IO.socket("http://3cf5de473679.ngrok.io");
+            mSocket = IO.socket("http://0b78bf0553f2.ngrok.io");
         } catch (URISyntaxException e) {}
     }
 
@@ -104,7 +104,6 @@ public class ListOrderFragment extends Fragment {
         orders = new ArrayList<>();
         mSocket.connect();
         mSocket.on("newOrder", order);
-        mSocket.on("removeOrder", test);
     }
 
     private void getOrder(){
@@ -138,6 +137,7 @@ public class ListOrderFragment extends Fragment {
 //                        edit.apply();
 //                        startActivity(intent);
 //                    });
+                    call.cancel();
                 }
             }
 
@@ -149,19 +149,6 @@ public class ListOrderFragment extends Fragment {
             }
         });
     }
-    private Emitter.Listener test = args -> getActivity().runOnUiThread(() -> {
-        JSONObject data = (JSONObject) args[0];
-        Gson gson = new Gson();
-        Order order = gson.fromJson(data.toString(), Order.class);
-        orders.remove(order);
-
-        if (getActivity() != null){
-            customAdapter = new CustomAdapter(getActivity(), orders);
-            customAdapter.notifyDataSetChanged();
-            listView.setAdapter(customAdapter);
-            listView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        }
-    });
 
     private Emitter.Listener order = args -> getActivity().runOnUiThread(() -> {
         JSONObject data = (JSONObject) args[0];
@@ -204,5 +191,11 @@ public class ListOrderFragment extends Fragment {
         listProcessBar = view.findViewById(R.id.listProcessBar);
         getOrder();
         return view;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mSocket.disconnect();
     }
 }

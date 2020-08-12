@@ -19,7 +19,8 @@
         android:targetSandboxVersion="1"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="${cleartextTrafficPermitted}">
-        <activity android:name=".features.Statistics.StatisticDetailOrdersActivity"></activity>
+        <activity android:name=".features.Statistics.RatingActivity"></activity>
+        <activity android:name=".features.Statistics.StatisticDetailOrdersActivity" />
         <activity android:name=".features.Statistics.FailedOrderActivity" />
         <activity android:name=".features.Statistics.CompletedOrderActivity" />
         <activity android:name=".features.Map.MapActivity" />
@@ -33,7 +34,7 @@
         </activity>
         <activity android:name=".features.Logon.RegisterActivity" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".NewShipperActivity"></activity>
+        <activity android:name=".NewShipperActivity" />
         <activity
             android:name=".features.Logon.LoginActivity"
             android:windowSoftInputMode="adjustResize" />

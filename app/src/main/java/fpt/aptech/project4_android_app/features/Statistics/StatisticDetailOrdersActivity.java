@@ -12,9 +12,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import fpt.aptech.project4_android_app.MainActivity;
@@ -70,13 +72,16 @@ public class StatisticDetailOrdersActivity extends AppCompatActivity {
                 if (!response.isSuccessful()) return;
                 else {
                     List<Map<String, ?>> products = response.body().getProducts();
-                    tvCountPrice.setText(response.body().getAmount().toString().split("\\.")[0] + "đ");
+                    String COUNTRY = "VN";
+                    String LANGUAGE = "vi";
+                    String str = NumberFormat.getCurrencyInstance(new Locale(LANGUAGE, COUNTRY)).format(response.body().getAmount());
+                    String fee = NumberFormat.getCurrencyInstance(new Locale(LANGUAGE, COUNTRY)).format(response.body().getFee());
+                    tvCountPrice.setText(fee);
                     tvAddress.setText(response.body().getAddress());
                     tvUserName.setText(response.body().getUser().getFullname());
                     tvStoreName.setText(response.body().getRestaurant().getName());
-                    tvAmount.setText(response.body().getAmount().toString().split("\\.")[0] + "đ");
+                    tvAmount.setText(str);
                     storeAddress.setText(response.body().getRestaurant().getAddress());
-                    tvCountPrice.setText(response.body().getFee().toString().split("\\.")[0] + "đ");
                     List<Map<String, ?>> list=new ArrayList<>();
                     for (Map<String,?> item:
                             products) {
@@ -84,7 +89,7 @@ public class StatisticDetailOrdersActivity extends AppCompatActivity {
                         temp.put("quantity",item.get("quantity"));
                         temp.put("productName",((Map) item.get("product")).get("name"));
                         temp.put("image",((Map) item.get("product")).get("image"));
-                        temp.put("price", ((Map) item.get("product")).get("price"));
+                        temp.put("price",((Map) item.get("product")).get("price"));
                         list.add(temp);
                     }
                     ProductList customList;

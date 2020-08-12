@@ -29,9 +29,11 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import fpt.aptech.project4_android_app.MainActivity;
@@ -110,12 +112,15 @@ public class DetailsOrderActivity extends AppCompatActivity {
                 }
                 else {
                     Order order = response.body();
+                    String COUNTRY = "VN";
+                    String LANGUAGE = "vi";
+                    String countPrice = NumberFormat.getCurrencyInstance(new Locale(LANGUAGE, COUNTRY)).format(order.getAmount());
                     List<Map<String, ?>> products = response.body().getProducts();
                     tvStoreName.setText(order.getRestaurant().getName());
-                    tvCountPrice.setText(order.getAmount() + "đ");
+                    tvCountPrice.setText(countPrice);
                     tvUserName.setText(order.getUser().getFullname() +" - "+order.getUser().getPhone());
                     tvAddress.setText(order.getAddress());
-                    tvAmount.setText(order.getAmount() + "đ");
+                    tvAmount.setText(countPrice);
                     storeName.setText(order.getRestaurant().getName());
                     storeAddress.setText(order.getRestaurant().getAddress());
                     List<Map<String, ?>> list=new ArrayList<>();

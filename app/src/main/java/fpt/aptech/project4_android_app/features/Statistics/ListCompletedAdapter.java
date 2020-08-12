@@ -13,7 +13,10 @@ import androidx.annotation.Nullable;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.NumberFormat;
+import java.util.Currency;
 import java.util.List;
+import java.util.Locale;
 
 import fpt.aptech.project4_android_app.R;
 import fpt.aptech.project4_android_app.api.models.Order;
@@ -39,6 +42,9 @@ public class ListCompletedAdapter extends ArrayAdapter<Order> {
         }
         Order order = getItem(position);
         if (order != null) {
+            String COUNTRY = "VN";
+            String LANGUAGE = "vi";
+            String str = NumberFormat.getCurrencyInstance(new Locale(LANGUAGE, COUNTRY)).format(order.getAmount());
             TextView tvAddress = v.findViewById(R.id.tvAddress);
             tvAddress.setText(order.getAddress());
             TextView tvRestaurant = v.findViewById(R.id.tvStoreName);
@@ -46,9 +52,9 @@ public class ListCompletedAdapter extends ArrayAdapter<Order> {
             TextView tvUserPhone = v.findViewById(R.id.tvUserPhone);
             tvUserPhone.setText(order.getUser().getPhone());
             TextView tvAmount = v.findViewById(R.id.tvPrice);
-            tvAmount.setText(String.valueOf(order.getAmount()).split("\\.")[0] + "đ");
+            tvAmount.setText(str);
             ImageView imageStore = v.findViewById(R.id.tvImageStore);
-            Picasso.get().load("http://3cf5de473679.ngrok.io/public/image/"+order.getRestaurant().getAvatar()).into(imageStore);
+            Picasso.get().load("http://0b78bf0553f2.ngrok.io/public/image/"+order.getRestaurant().getAvatar()).into(imageStore);
         }
         return v;
     }

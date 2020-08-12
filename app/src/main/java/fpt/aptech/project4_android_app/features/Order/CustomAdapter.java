@@ -19,7 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 
 import fpt.aptech.project4_android_app.R;
@@ -52,12 +54,16 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Order order = orders.get(position);
+        String COUNTRY = "VN";
+        String LANGUAGE = "vi";
+        String price = NumberFormat.getCurrencyInstance(new Locale(LANGUAGE, COUNTRY)).format(order.getAmount());
+        String fee = NumberFormat.getCurrencyInstance(new Locale(LANGUAGE, COUNTRY)).format(order.getFee());
         holder.tvStoreName.setText(order.getRestaurant().getName());
         holder.tvAddress.setText(order.getAddress());
-        holder.tvFee.setText(order.getFee().toString() +"đ");
-        holder.tvPrice.setText(order.getAmount().toString() +"đ");
+        holder.tvFee.setText(fee);
+        holder.tvPrice.setText(price);
         holder.tvUserPhone.setText(order.getUser().getPhone());
-        Picasso.get().load("http://3cf5de473679.ngrok.io/public/image/" + order.getRestaurant().getAvatar()).into(holder.tvImageStore);
+        Picasso.get().load("http://0b78bf0553f2.ngrok.io/public/image/" + order.getRestaurant().getAvatar()).into(holder.tvImageStore);
     }
 
     @Override

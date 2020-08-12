@@ -73,7 +73,8 @@
                 android:paddingLeft="5dp"
                 android:paddingTop="20dp"
                 android:paddingRight="5dp"
-                android:paddingBottom="20dp">
+                android:paddingBottom="20dp"
+                android:clickable="true">
 
                 <TextView
                     android:layout_width="150dp"
@@ -88,12 +89,19 @@
 
                 <TextView
                     android:id="@+id/tvStar"
-                    android:layout_width="wrap_content"
+                    android:layout_width="110dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_weight="1"
-                    android:text="Chưa có đánh giá"
+                    android:text="Đang tải..."
                     android:textSize="24sp" />
+
+                <ImageView
+                    android:id="@+id/imageView5"
+                    android:layout_width="10dp"
+                    android:layout_height="39dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/star" />
             </LinearLayout>
 
             <LinearLayout
@@ -126,12 +134,19 @@
 
                 <TextView
                     android:id="@+id/tvAcceptOrder"
-                    android:layout_width="wrap_content"
+                    android:layout_width="110dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_weight="1"
-                    android:text="TextView"
+                    android:text="Đang tải..."
                     android:textSize="24sp" />
+
+                <ImageView
+                    android:id="@+id/imageView7"
+                    android:layout_width="10dp"
+                    android:layout_height="39dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/completed" />
             </LinearLayout>
 
             <LinearLayout
@@ -164,12 +179,19 @@
 
                 <TextView
                     android:id="@+id/tvFailOrder"
-                    android:layout_width="wrap_content"
+                    android:layout_width="110dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_weight="1"
-                    android:text="TextView"
+                    android:text="Đang tải..."
                     android:textSize="24sp" />
+
+                <ImageView
+                    android:id="@+id/imageView8"
+                    android:layout_width="10dp"
+                    android:layout_height="39dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/canceled" />
             </LinearLayout>
 
             <LinearLayout
@@ -201,12 +223,19 @@
 
                 <TextView
                     android:id="@+id/tvAmount"
-                    android:layout_width="150dp"
+                    android:layout_width="110dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_weight="1"
-                    android:text="TextView"
+                    android:text="Đang tải..."
                     android:textSize="24sp" />
+
+                <ImageView
+                    android:id="@+id/imageView6"
+                    android:layout_width="10dp"
+                    android:layout_height="39dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/money" />
             </LinearLayout>
 
             <LinearLayout
@@ -237,12 +266,19 @@
 
                 <TextView
                     android:id="@+id/tvRoad"
-                    android:layout_width="wrap_content"
+                    android:layout_width="110dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_weight="1"
                     android:text="Đang tải..."
                     android:textSize="24sp" />
+
+                <ImageView
+                    android:id="@+id/imageView9"
+                    android:layout_width="10dp"
+                    android:layout_height="39dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/road" />
             </LinearLayout>
 
 

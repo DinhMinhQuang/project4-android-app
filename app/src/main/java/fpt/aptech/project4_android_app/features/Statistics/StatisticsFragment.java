@@ -15,8 +15,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import fpt.aptech.project4_android_app.R;
@@ -58,8 +61,8 @@ public class StatisticsFragment extends Fragment {
         return fragment;
     }
     ProgressBar progressBar;
-    LinearLayout redirectAcceptOrder, redirectFailOrder, wrap;
-    TextView tvAcceptOrder, tvFailOrder, tvAmount;
+    LinearLayout redirectAcceptOrder, redirectFailOrder, wrap, redirectStars;
+    TextView tvAcceptOrder, tvFailOrder, tvAmount, tvStar;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +70,36 @@ public class StatisticsFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+    }
+
+    private void shipperRating() {
+        sp = this.getActivity().getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        edit = sp.edit();
+        String jwt = sp.getString("jwt", null);
+        String access_token = "JWT "+jwt;
+        Call<Shipper> call = shipperClient.getShipperDetails(access_token);
+        call.enqueue(new Callback<Shipper>() {
+            @Override
+            public void onResponse(Call<Shipper> call, Response<Shipper> response) {
+                if (!response.isSuccessful()) return;
+                else {
+                    List<Map> rating = (ArrayList) (response.body().getRating());
+                    double countRater = 0;
+                    double stars = 0;
+                    for (Map item : rating){
+                        countRater++;
+                        stars += Double.parseDouble(String.valueOf(item.get("stars")));
+                    }
+                    double counting = stars / countRater;
+                    tvStar.setText(Integer.toString((int) counting));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Shipper> call, Throwable t) {
+                Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void statistics(){
@@ -80,6 +113,8 @@ public class StatisticsFragment extends Fragment {
             public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
                 if (!response.isSuccessful()) return;
                 else {
+                    String COUNTRY = "VN";
+                    String LANGUAGE = "vi";
                     int countFailed = 0;
                     int countComplete = 0;
                     double sumAmount = 0;
@@ -95,9 +130,10 @@ public class StatisticsFragment extends Fragment {
                             countFailed++;
                         }
                     }
+                    String str = NumberFormat.getCurrencyInstance(new Locale(LANGUAGE, COUNTRY)).format(realAmount);
                     tvFailOrder.setText(String.valueOf(countFailed));
                     tvAcceptOrder.setText(String.valueOf(countComplete));
-                    tvAmount.setText(String.valueOf(realAmount).toString().split("\\.")[0]+"đ");
+                    tvAmount.setText(str);
                     progressBar.setVisibility(View.GONE);
                     wrap.setVisibility(View.VISIBLE);
                 }
@@ -116,11 +152,17 @@ public class StatisticsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_statistics, container, false);
         wrap = view.findViewById(R.id.wrap);
         progressBar = view.findViewById(R.id.progressBar);
+        redirectStars = view.findViewById(R.id.redirectStar);
         redirectAcceptOrder = view.findViewById(R.id.redirectAcceptOrder);
         redirectFailOrder = view.findViewById(R.id.redirectFailOrder);
         tvAcceptOrder = view.findViewById(R.id.tvAcceptOrder);
         tvFailOrder = view.findViewById(R.id.tvFailOrder);
         tvAmount = view.findViewById(R.id.tvAmount);
+        tvStar = view.findViewById(R.id.tvStar);
+        redirectStars.setOnClickListener(view13 -> {
+            Intent intent = new Intent(getActivity(), RatingActivity.class);
+            startActivity(intent);
+        });
         redirectAcceptOrder.setOnClickListener(view1 -> {
             Intent intent = new Intent(getActivity(), CompletedOrderActivity.class);
             startActivity(intent);
@@ -130,6 +172,7 @@ public class StatisticsFragment extends Fragment {
             startActivity(intent);
         });
         statistics();
+        shipperRating();
         return view;
     }
 }

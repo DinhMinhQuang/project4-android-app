@@ -33,7 +33,7 @@ public class Coupon {
     private Double min;
     @SerializedName("exp")
     @Expose
-    private Date exp;
+    private String exp;
     @SerializedName("percent")
     @Expose
     private Double percent;
@@ -105,11 +105,11 @@ public class Coupon {
         this.min = min;
     }
 
-    public Date getExp() {
+    public String getExp() {
         return exp;
     }
 
-    public void setExp(Date exp) {
+    public void setExp(String exp) {
         this.exp = exp;
     }
 

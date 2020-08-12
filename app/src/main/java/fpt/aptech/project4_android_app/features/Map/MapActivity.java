@@ -12,6 +12,9 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,6 +30,8 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.auth0.android.jwt.Claim;
+import com.auth0.android.jwt.JWT;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Manager;
@@ -36,21 +41,28 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.maps.android.PolyUtil;
 import com.goong.geocoder.places.data.remote.entity.AutoCompleteResponse;
 import com.goong.geocoder.places.data.remote.entity.ChildPlace;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import fpt.aptech.project4_android_app.MainActivity;
+import fpt.aptech.project4_android_app.NewShipperActivity;
+import fpt.aptech.project4_android_app.api.models.LatLngDeserializer;
 import fpt.aptech.project4_android_app.api.models.Order;
 import fpt.aptech.project4_android_app.api.models.Shipper;
 import fpt.aptech.project4_android_app.api.network.RetroClass;
 import fpt.aptech.project4_android_app.api.service.ShipperClient;
 import fpt.aptech.project4_android_app.features.Order.CustomAdapter;
+import io.goong.goongsdk.annotations.Icon;
+import io.goong.goongsdk.annotations.IconFactory;
 import io.goong.goongsdk.annotations.Polygon;
 import io.goong.goongsdk.annotations.PolygonOptions;
 import io.goong.goongsdk.location.Utils;
@@ -100,15 +112,21 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     FusedLocationProviderClient client;
     SupportMapFragment mapFragment;
     MapClient mapClient = RetroMap.getRetrofitInstance().create(MapClient.class);
+    Map listLngLat;
+    String[] userLngLatArray;
+    String[] restaurantLngLatArray;
     static LatLng YOUR_LOCATION;
+    static LatLng userLatlng;
+    static LatLng restaurantLatLng;
     List<ChildPlace> childPlaces;
+    GoongMap goongMap;
     private NotificationManagerCompat notificationManagerCompat;
     ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
     private Socket mSocket;
 
     {
         try {
-            mSocket = IO.socket("http://3cf5de473679.ngrok.io");
+            mSocket = IO.socket("http://0b78bf0553f2.ngrok.io");
         } catch (URISyntaxException e) {}
     }
     @Override
@@ -118,7 +136,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_map);
         btnComplete = findViewById(R.id.btnComplete);
         btnDelivery = findViewById(R.id.btnDelivery);
+        sp = this.getApplication().getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+        String jwt1 = sp.getString("jwt", null);
+        JWT jwt = new JWT(jwt1);
+        Claim subscriptionMetaData = jwt.getClaim("_id");
+        String shipperId = subscriptionMetaData.asString();
         mSocket.connect();
+        mSocket.emit("join", shipperId);
         mSocket.on("cancelOrder", args -> {
             Intent intent = new Intent(getApplication(), MainActivity.class);
             startActivity(intent);
@@ -132,6 +156,21 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     .build();
             notificationManagerCompat.notify(1, mBuilder);
             service.shutdown();
+        });
+        mSocket.on("blockShipper", arg -> {
+            notificationManagerCompat = NotificationManagerCompat.from(getApplication());
+            Notification mBuilder = new NotificationCompat.Builder(getApplication(), CHANNEL_CANCEL_BY_USER)
+                    .setSmallIcon(R.drawable.fooddelivery)
+                    .setContentTitle("Tài khoản của bạn đã bị khóa")
+                    .setContentText("Vui lòng đến trụ sở FoodTap để mở khóa tài khoản")
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setCategory(NotificationCompat.CATEGORY_SOCIAL)
+                    .build();
+            notificationManagerCompat.notify(1, mBuilder);
+            service.shutdown();
+            android.os.Process.killProcess(android.os.Process.myPid());
+            Intent intent = new Intent(getApplication(), NewShipperActivity.class);
+            startActivity(intent);
         });
         btnCancel = findViewById(R.id.btnCancel);
         btnDelivery.setOnClickListener(view -> delivery());
@@ -156,6 +195,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             ActivityCompat.requestPermissions(MapActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
         }
     }
+
+
 
     private void cancel(){
         sp = this.getApplication().getSharedPreferences(PREFS, Context.MODE_PRIVATE);
@@ -266,25 +307,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         });
     }
 
-    private void getStoreLocation() {
-        sp = this.getApplication().getSharedPreferences(PREFS, Context.MODE_PRIVATE);
-        edit = sp.edit();
-        String address = sp.getString("address", null);
-        Call<AutoCompleteResponse> call = mapClient.getPlaceId("I5XNVFf02SmWyMubBbmoHapYN5YvBC3zarzZTx7U", address, 2, 150);
-        try {
-            Response<AutoCompleteResponse> response = call.execute();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void getDirection(){
-
-    }
-
     private void getCurrentLocation() {
-        GoongMap goongMap;
+
         sp = this.getApplication().getSharedPreferences(PREFS, Context.MODE_PRIVATE);
         String jwt = sp.getString("jwt", null);
         String access_token = "JWT "+jwt;
@@ -297,26 +321,39 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         mapFragment.getMapAsync(new OnMapReadyCallback() {
                             @Override
                             public void onMapReady(@NonNull GoongMap mapboxMap) {
+                                goongMap = mapboxMap;
                                 YOUR_LOCATION = new LatLng(location.getLatitude(), location.getLongitude());
                                 MarkerOptions markerOptions = new MarkerOptions().position(YOUR_LOCATION).title("Bạn ở đây");
-                                mapboxMap.animateCamera(CameraUpdateFactory.newLatLngZoom(YOUR_LOCATION, 15));
-                                mapboxMap.addMarker(markerOptions);
-                                List<LatLng> points = new ArrayList<>();
-                                points.add(YOUR_LOCATION);
-                                mapboxMap.addPolyline(new PolylineOptions()
-                                        .addAll(points)
-                                        .color(Color.parseColor("#3bb2d0"))
-                                        .alpha((float) 0.5)
-                                        .width(2));
-                                Call<String> call = shipperClient.sendMyLocation(access_token, YOUR_LOCATION);
-                                call.enqueue(new Callback<String>() {
+                                goongMap.animateCamera(CameraUpdateFactory.newLatLngZoom(YOUR_LOCATION, 15));
+                                goongMap.addMarker(markerOptions);
+                                Call<Object> call = shipperClient.sendMyLocation(access_token, YOUR_LOCATION);
+                                call.enqueue(new Callback<Object>() {
                                     @Override
-                                    public void onResponse(Call<String> call, Response<String> response) {
+                                    public void onResponse(Call<Object> call, Response<Object> response) {
                                         if (!response.isSuccessful()) return;
+                                        else {
+                                            IconFactory iconFactory = IconFactory.getInstance(MapActivity.this);
+                                            Icon icon = iconFactory.fromResource(R.drawable.userlocation);
+                                            Icon iconres = iconFactory.fromResource(R.drawable.location);
+                                            LatLng userLatLng = new LatLng();
+                                            LatLng restaurantLatLng = new LatLng();
+                                            double latUser = Double.parseDouble(String.valueOf(((ArrayList)((ArrayList)response.body()).get(0)).get(0)));
+                                            double lngUser = Double.parseDouble(String.valueOf(((ArrayList)((ArrayList)response.body()).get(0)).get(1)));
+                                            double latRestaurant = Double.parseDouble(String.valueOf(((ArrayList)((ArrayList)response.body()).get(1)).get(0)));
+                                            double lngRestaurant = Double.parseDouble(String.valueOf(((ArrayList)((ArrayList)response.body()).get(1)).get(1)));
+                                            userLatLng.setLatitude(latUser);
+                                            userLatLng.setLongitude(lngUser);
+                                            restaurantLatLng.setLatitude(latRestaurant);
+                                            restaurantLatLng.setLongitude(lngRestaurant);
+                                            MarkerOptions markerOptions1 = new MarkerOptions().position(userLatLng).icon(icon).title("Người đặt");
+                                            MarkerOptions markerOptions2 = new MarkerOptions().position(restaurantLatLng).icon(iconres).title("Cửa hàng");
+                                            goongMap.addMarker(markerOptions1);
+                                            goongMap.addMarker(markerOptions2);
+                                        }
                                     }
 
                                     @Override
-                                    public void onFailure(Call<String> call, Throwable t) {
+                                    public void onFailure(Call<Object> call, Throwable t) {
                                     }
                                 });
                             }
@@ -325,7 +362,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 }
             });
         };
-        service.scheduleAtFixedRate(runnable, 0, 10, TimeUnit.SECONDS);
+        service.scheduleAtFixedRate(runnable, 0, 30, TimeUnit.SECONDS);
     }
 
     @Override
@@ -342,4 +379,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mSocket.disconnect();
+        service.shutdown();
+    }
 }

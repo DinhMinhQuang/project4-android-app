@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Goong.getInstance(this, "4p35EI5AKS2sqmjuJIN5du5rcv4n8o8wXel5JDGD");
+        Goong.getInstance(this, "O1Fy59MBnBFFFRxsJGpnkv7TwnR2l5oO7uuHYeHB");
         setContentView(R.layout.activity_main);
         getSupportActionBar().setTitle("Food Tap Delivery");
         ListOrderFragment listOrderFragment = new ListOrderFragment();

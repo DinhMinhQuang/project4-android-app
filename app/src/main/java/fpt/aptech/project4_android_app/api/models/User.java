@@ -24,7 +24,7 @@ public class User {
     private List<Object> followers;
     @SerializedName("following")
     @Expose
-    private List<Object> following;
+    private Map<String, ?> following;
     @SerializedName("_id")
     @Expose
     private String id;
@@ -67,8 +67,13 @@ public class User {
     @SerializedName("notifications")
     @Expose
     private List<Map<String, ?>> notifications;
-    @SerializedName("")
+    @SerializedName("active")
+    @Expose
+    private Boolean active;
 
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 
     public List<String> getRestaurants() {
         return restaurants;
@@ -110,11 +115,11 @@ public class User {
         this.followers = followers;
     }
 
-    public List<Object> getFollowing() {
+    public Map<String, ?> getFollowing() {
         return following;
     }
 
-    public void setFollowing(List<Object> following) {
+    public void setFollowing(Map<String, ?> following) {
         this.following = following;
     }
 

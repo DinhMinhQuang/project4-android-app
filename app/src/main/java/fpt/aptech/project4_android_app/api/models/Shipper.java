@@ -34,7 +34,7 @@ public class Shipper {
     private String avatar;
     @SerializedName("rating")
     @Expose
-    private Map<String, ?> rating;
+    private List<Map<String, ?>> rating;
     @SerializedName("order")
     @Expose
     private Map<String, String> order;
@@ -45,6 +45,10 @@ public class Shipper {
     @SerializedName("currentOrder")
     @Expose
     private String currentOrder;
+
+    @SerializedName("active")
+    @Expose
+    private boolean active;
 
     public String get_id() {
         return _id;
@@ -110,11 +114,11 @@ public class Shipper {
         this.avatar = avatar;
     }
 
-    public Map<String, ?> getRating() {
+    public List<Map<String, ?>> getRating() {
         return rating;
     }
 
-    public void setRating(Map<String, ?> rating) {
+    public void setRating(List<Map<String, ?>> rating) {
         this.rating = rating;
     }
 
@@ -140,5 +144,13 @@ public class Shipper {
 
     public void setCurrentOrder(String currentOrder) {
         this.currentOrder = currentOrder;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

@@ -5,6 +5,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -61,6 +62,11 @@ public class Order {
     @SerializedName("message")
     @Expose
     private String message;
+
+    @SerializedName("rated")
+    @Expose
+    private Map<String, ?> rated;
+
     public String getId() {
         return id;
     }
@@ -187,5 +193,13 @@ public class Order {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public Map<String, ?> getRated() {
+        return rated;
+    }
+
+    public void setRated(Map<String, ?> rated) {
+        this.rated = rated;
     }
 }
